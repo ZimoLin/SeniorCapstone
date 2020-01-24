@@ -1,0 +1,4 @@
+/usr/local/lib/libcluster.dylib
+/usr/local/include/libcluster/libcluster.h
+/usr/local/include/libcluster/probutils.h
+/usr/local/include/libcluster/distributions.h
