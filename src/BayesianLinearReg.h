@@ -38,7 +38,8 @@ public:
 	~BayesianLinearReg();
 
 	
-	VectorXd prediction_limit(VectorXd& a_x, double stdevs);
+	VectorXd prediction_limit(MatrixXd& a_x, double stdevs);
+    void set_posterior(MatrixXd& a_x, VectorXd& a_t);
 
 
 private:
@@ -54,6 +55,5 @@ private:
 
 	double beta_;
 	
-	MatrixXd get_phi(VectorXd& a_x);
-	void set_posterior(VectorXd& a_x, VectorXd& a_t);
+	// MatrixXd get_phi(VectorXd& a_x);
 };

@@ -30,7 +30,6 @@ double BGMM::process_input(vector<double> input_data){
 
 	MatrixXd transformed_input = transformData(input_data);
 	int num_clusters = clusters.size();
-	cout << num_clusters << endl;
 
 	double best_loglikelihood = -DBL_MIN;
 	int best_ll_samples = 0;
