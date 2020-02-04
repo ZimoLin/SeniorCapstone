@@ -1,3 +1,6 @@
+#ifndef BAYESIANLINEARREG_H_
+#define BAYESIANLINEARREG_H_
+
 #include <Eigen/Dense>
 #include "float.h"
 #include <random>
@@ -55,5 +58,7 @@ private:
 
 	double beta_;
 	
-	// MatrixXd get_phi(VectorXd& a_x);
+	MatrixXd get_phi(VectorXd& a_x);
 };
+
+#endif

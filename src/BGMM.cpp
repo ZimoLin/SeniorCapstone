@@ -9,8 +9,10 @@ using namespace Eigen;
 using namespace libcluster;
 using namespace distributions;
 
-BGMM::BGMM(){
-
+BGMM::BGMM(vector<vector<double>> initial_data) : model(initial_data)
+{
+	for (vector<double> data : initial_data)
+		pushData(data);
 }
 
 BGMM::~BGMM(){
@@ -31,22 +33,38 @@ double BGMM::process_input(vector<double> input_data){
 	MatrixXd transformed_input = transformData(input_data);
 	int num_clusters = clusters.size();
 
-	double best_loglikelihood = -DBL_MIN;
-	int best_ll_samples = 0;
-	for (GaussWish cluster : clusters){
-		double log_likelihood = cluster.Eloglike(transformed_input)[0];
+	double best_loglikelihood = -DBL_MAX;
+	int best_cluster_idx = -1;
+
+	for (size_t i = 0; i < clusters.size(); ++i){
+		double log_likelihood = clusters[i].Eloglike(transformed_input)[0];
 		if (log_likelihood > best_loglikelihood) {
 			best_loglikelihood = log_likelihood;
-			best_ll_samples = cluster.get_num_samples();
+			best_cluster_idx = i;
 		}
 	}
+	
 	pushData(input_data);
 
 	double max_likelihood = exp(best_loglikelihood);
+	double best_ll_samples = qZ.col(best_cluster_idx).sum();
+	double likelihood = max_likelihood;
+
 	if (best_ll_samples * num_clusters < anomaly_level * vData.size()) {
-		return (double) (best_ll_samples * num_clusters) / (double) (vData.size());
+		likelihood = (best_ll_samples * num_clusters) / vData.size();
 	}
-	return max_likelihood;
+
+	// cout << "best ll samples: " << best_ll_samples << endl;
+	// cout << "likelihood: " << likelihood << endl;
+	// cout << "num_clusters: " << num_clusters << endl;
+	// cout << "num samples: " << vData.size() << endl;
+	// cout << "best log likelihood: " << best_loglikelihood << endl; 
+
+	if (likelihood > 0.999) 
+		return 25.0;
+	else if (likelihood < 0.001)
+		return -25.0;
+	return log(likelihood/(1-likelihood));
 }
 
 void BGMM::process_feedback(vector<double> input_data, bool isAnomaly){
@@ -63,10 +81,6 @@ void BGMM::pushData(vector<double> input_data){
 
 	vData.push_back(transformData(input_data));
 	++dNum;
-}
-
-void BGMM::printData(){
-	cout << vData[0] << endl;
 }
 
 //transform data from vector<double> to MatrixXd

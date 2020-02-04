@@ -4,9 +4,9 @@
 #include "model.h"
 #include "libcluster.h"
 #include "distributions.h"
+#include <vector>
 
 using namespace std;
-using std::vector;
 using namespace Eigen;
 using namespace libcluster;
 using namespace distributions;
@@ -14,13 +14,11 @@ using namespace distributions;
 class BGMM : public model
 {
 public:
-	BGMM();
+	BGMM(vector<vector<double>> initial_data);
 	~BGMM();
 	double process_input(vector<double> input_data);
 	void process_feedback(vector<double> input_data, bool isAnomaly);
-	void printData();
 	void pushData(vector<double> input_data);
-	// void printWeight();
 private:
 	MatrixXd transformData(vector<double> input_data);
 

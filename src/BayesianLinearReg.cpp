@@ -47,4 +47,3 @@ VectorXd BayesianLinearReg::prediction_limit(MatrixXd& a_x, double stdevs)
 
 	return prediction;
 }
-

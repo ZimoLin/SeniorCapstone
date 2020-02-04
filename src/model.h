@@ -8,8 +8,8 @@ using namespace std;
 class model
 {
 public:
-	model(){}
-	virtual ~model(){}
+	model(vector<vector<double>> initial_input){(void) initial_input;}
+	virtual ~model(){};
 	virtual double process_input(vector<double> input_data) = 0;
 	virtual void process_feedback(vector<double> input_data, bool isAnomaly) = 0;	
 };
