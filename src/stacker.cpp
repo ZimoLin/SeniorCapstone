@@ -40,9 +40,8 @@ double stacker::process_input(vector<double> input_data)
 
 	for (size_t i = 0; i < Models_.size(); ++i)
 		model_predictions(i) = Models_[i]->process_input(input_data);
-
+	
 	model_predictions(Models_.size()) = 1.0;
-
 	return inverse_logit(stacking_model_->prediction_limit(model_predictions, 0.0)(0));
 }
 

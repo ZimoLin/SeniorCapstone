@@ -23,10 +23,13 @@ int main()
 
 	stacker testStacker(model_list, 2, initial_data);
 
-	cout << testStacker.process_input({0, 0}) << endl;
 	cout << testStacker.process_input({100, 100}) << endl;
-	cout << testStacker.process_input({1, 1}) << endl;
+	cout << testStacker.process_input({0, 0}) << endl;
+	cout << testStacker.process_input({.5, .5}) << endl;
 
+	testStacker.process_feedback({0.767035} ,{0.5, 0.5}, false);
+
+	cout << testStacker.process_input({.5, .5}) << endl;
 
 	return 0;
 }
