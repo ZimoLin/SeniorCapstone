@@ -294,6 +294,8 @@ public:
 
   void clearobs ();
 
+  Eigen::VectorXd normalized_likelihood (const Eigen::MatrixXd& X) const;
+
   Eigen::VectorXd Eloglike (const Eigen::MatrixXd& X) const;
 
   ArrayXb splitobs (const Eigen::MatrixXd& X) const;

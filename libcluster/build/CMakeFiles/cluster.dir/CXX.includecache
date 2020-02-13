@@ -14,20 +14,6 @@ vector
 stdexcept
 -
 
-../include/libcluster.h
-stdexcept
--
-iostream
--
-Eigen/Dense
--
-vector
--
-omp.h
--
-distributions.h
-../include/distributions.h
-
 ../include/probutils.h
 stdexcept
 -
@@ -36,36 +22,6 @@ Eigen/Dense
 vector
 -
 
-/Users/zimolin/Desktop/senior capstone/libcluster/src/cluster.cpp
-limits
--
-libcluster.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/libcluster.h
-probutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/probutils.h
-distributions.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/distributions.h
-comutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/comutils.h
-
-/Users/zimolin/Desktop/senior capstone/libcluster/src/comutils.cpp
-comutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/comutils.h
-
-/Users/zimolin/Desktop/senior capstone/libcluster/src/comutils.h
-Eigen/Dense
--
-vector
--
-stdexcept
--
-libcluster.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/libcluster.h
-probutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/probutils.h
-distributions.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/distributions.h
-
 /Users/zimolin/Desktop/senior capstone/libcluster/src/distributions.cpp
 boost/math/special_functions.hpp
 -
@@ -73,26 +29,8 @@ distributions.h
 /Users/zimolin/Desktop/senior capstone/libcluster/src/distributions.h
 probutils.h
 /Users/zimolin/Desktop/senior capstone/libcluster/src/probutils.h
-
-/Users/zimolin/Desktop/senior capstone/libcluster/src/mcluster.cpp
-limits
+cmath
 -
-libcluster.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/libcluster.h
-probutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/probutils.h
-comutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/comutils.h
-
-/Users/zimolin/Desktop/senior capstone/libcluster/src/scluster.cpp
-limits
--
-libcluster.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/libcluster.h
-probutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/probutils.h
-comutils.h
-/Users/zimolin/Desktop/senior capstone/libcluster/src/comutils.h
 
 /usr/local/include/boost/array.hpp
 boost/detail/workaround.hpp

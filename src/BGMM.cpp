@@ -33,24 +33,21 @@ double BGMM::process_input(vector<double> input_data){
         MatrixXd transformed_input = transformData(input_data);
         int num_clusters = clusters.size();
 
-        double best_likelihood = -1;
-        int best_cluster_idx = -1;
+        double best_likelihood = 0;
 
         for (size_t i = 0; i < clusters.size(); ++i){
-                double likelihood = clusters[i].normalized_likelihood(transformed_input)[0];
-                if (likelihood > best_likelihood) {
-                        best_likelihood = likelihood;
-                        best_cluster_idx = i;
+                double cluster_likelihood = clusters[i].normalized_likelihood(transformed_input)[0];
+                double cluster_samples = qZ.col(i).sum();
+                double anomalous_cluster_measure = (cluster_samples * num_clusters) / vData.size() / anomaly_level;
+                if (anomalous_cluster_measure < cluster_likelihood) {
+                    cluster_likelihood = anomalous_cluster_measure;
+                }
+                if (cluster_likelihood > best_likelihood) {
+                        best_likelihood = cluster_likelihood;
                 }
         }
         
         pushData(input_data);
-
-        double best_ll_samples = qZ.col(best_cluster_idx).sum();
-
-        if (best_ll_samples * num_clusters < anomaly_level * vData.size()) {
-                best_likelihood = (best_ll_samples * num_clusters) / vData.size();
-        }
 
         if (best_likelihood > 0.999) 
                 return 25.0;

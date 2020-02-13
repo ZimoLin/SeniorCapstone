@@ -25,7 +25,7 @@ private:
 	//vars
 	vector<MatrixXd> vData;
 	int dSize = 0, dNum = 0;
-	double anomaly_level = .01;
+	const double anomaly_level = .1;
 };
 
 #endif

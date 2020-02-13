@@ -6,7 +6,7 @@
 using namespace std;
 using namespace Eigen;
 
-stacker::stacker(vector<string> model_list, int input_size, vector<vector<double>> initial_data)
+stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data)
 {
 	for (string model_name : model_list){
 		if (model_name == "BGMM"){
@@ -34,15 +34,20 @@ stacker::~stacker()
 	delete stacking_model_;
 }
 
-double stacker::process_input(vector<double> input_data)
+vector<double> stacker::process_input(vector<double> input_data)
 {
 	MatrixXd model_predictions(1, Models_.size() + 1);
+	vector<double> res;
 
-	for (size_t i = 0; i < Models_.size(); ++i)
-		model_predictions(i) = Models_[i]->process_input(input_data);
-	
+	for (size_t i = 0; i < Models_.size(); ++i){
+		double tempRes = Models_[i]->process_input(input_data);
+		model_predictions(i) = tempRes;
+		res.push_back(tempRes);
+	}
+
 	model_predictions(Models_.size()) = 1.0;
-	return inverse_logit(stacking_model_->prediction_limit(model_predictions, 0.0)(0));
+	res.push_back(inverse_logit(stacking_model_->prediction_limit(model_predictions, 0.0)(0)));
+	return res;
 }
 
 void stacker::process_feedback(vector<double> model_outputs, vector<double> input_data, bool is_anamoly)
@@ -50,16 +55,16 @@ void stacker::process_feedback(vector<double> model_outputs, vector<double> inpu
 	for (auto& m : Models_)
 		m->process_feedback(input_data, is_anamoly);
 
-	double res = logit(is_anamoly);
+	double res = logit(!is_anamoly);
 
 	VectorXd a_t(1);
 	a_t(0) = res;
 
-	MatrixXd a_x;
+	MatrixXd a_x(1, model_outputs.size() + 1);
 
-	for (double output : model_outputs)
-		a_x << output;
-	a_x << 1.0;
+	for (size_t i = 0; i < model_outputs.size(); ++i)
+		a_x(0, i) =  model_outputs[i];
+	a_x(0, model_outputs.size()) = 1.0;
 
 	stacking_model_->set_posterior(a_x, a_t);
 }

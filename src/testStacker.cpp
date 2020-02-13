@@ -27,9 +27,13 @@ int main()
 	cout << testStacker.process_input({0, 0}) << endl;
 	cout << testStacker.process_input({.5, .5}) << endl;
 
+	cout << testStacker.process_input({1, 1}) << endl;
+
 	testStacker.process_feedback({0.767035} ,{0.5, 0.5}, false);
 
 	cout << testStacker.process_input({.5, .5}) << endl;
+	cout << testStacker.process_input({2, 2}) << endl;
+
 
 	return 0;
 }

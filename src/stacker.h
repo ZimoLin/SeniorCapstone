@@ -10,10 +10,10 @@
 class stacker
 {
 public:
-	stacker(vector<string> model_list, int input_size, vector<vector<double>> initial_data);
+	stacker(vector<string> model_list, vector<vector<double>> initial_data);
 	~stacker();
 
-	double process_input(vector<double> input_data);
+	vector<double> process_input(vector<double> input_data);
 	void process_feedback(vector<double> model_outputs, vector<double> input_data, bool is_anamoly);
 
 private:
