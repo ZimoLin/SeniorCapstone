@@ -3,5 +3,5 @@
 int main()
 {
 	setting_helper helper;
-	helper.createSetting();
+	helper.create_setting();
 }

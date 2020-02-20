@@ -10,7 +10,7 @@ setting_helper::~setting_helper()
     
 }
 
-Setting setting_helper::parseSetting(string fname) {
+Setting setting_helper::parse_setting(string fname) {
     string line;
     ifstream myfile (fname);
     double anomaly_level = 0.8;
@@ -208,7 +208,7 @@ Setting setting_helper::parseSetting(string fname) {
 // }
 
 // Creating a new setting file
-void setting_helper::createSetting()
+void setting_helper::create_setting()
 {
 
     // int dimension = 0;

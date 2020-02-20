@@ -15,11 +15,11 @@ using namespace Eigen;
 typedef struct setting
 {
     int s_max_store;
+    int s_prediction_delay;
     double s_anomaly_level;
     vector<string> s_models;
-    vector<vector<double>> s_barriers;
-    int s_prediction_delay;
     vector<string> s_features;
+    vector<vector<double>> s_barriers;
 } Setting;
 
 class setting_helper
@@ -28,8 +28,8 @@ public:
 	setting_helper();
 	~setting_helper();
 
-	Setting parseSetting(string fname);
-	void createSetting();
+	Setting parse_setting(string fname);
+	void create_setting();
 	
 };
 

@@ -8,25 +8,25 @@
 using namespace std::chrono;
 using namespace std;
 
-AnomalyDetectionSystem::AnomalyDetectionSystem(string fileName)
+AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 {
-	if (fileName.empty()){
-		anomalyLevel_ = 0.05;
-		derivedFeatures_ = {"delta", "weekday", "time", "date", "month"};
+	if (file_name.empty()){
+		anomaly_level_ = 0.05;
+		derived_features_ = {"delta", "weekday", "time", "date", "month"};
 		models_ = {"BGMM"};
-		predictionDelay_ = 1000;
-		Barriers_ = vector<vector<double>>();		
+		prediction_delay_ = 1000;
+		barriers_ = vector<vector<double>>();		
 		max_stored_data_points_ = 1000;
 	} else {
 		setting_helper helper;
-		Setting userSetting = helper.parseSetting(fileName); 
+		Setting user_setting = helper.parse_setting(file_name); 
 
-		anomalyLevel_ = userSetting.s_anomaly_level;
-		derivedFeatures_ = set<string>(userSetting.s_features.begin(), userSetting.s_features.end());
-		models_ = userSetting.s_models;
-		predictionDelay_ = userSetting.s_prediction_delay;
-		Barriers_ = userSetting.s_barriers;
-		max_stored_data_points_ = userSetting.s_max_store;
+		anomaly_level_ = user_setting.s_anomaly_level;
+		derived_features_ = set<string>(user_setting.s_features.begin(), user_setting.s_features.end());
+		models_ = user_setting.s_models;
+		prediction_delay_ = user_setting.s_prediction_delay;
+		barriers_ = user_setting.s_barriers;
+		max_stored_data_points_ = user_setting.s_max_store;
 	}	
 }
 
@@ -42,7 +42,7 @@ void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected
 	vector<double> next_data = data;
 	vector<double> model_results(models_.size(), numeric_limits<double>::quiet_NaN());
 
-	if (readyForProcessing()){
+	if (ready_for_processing()){
 
 		add_derived_features(data);
 
@@ -52,14 +52,14 @@ void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected
 			double dataAnomalyConf = model_results.back();
 			model_results.pop_back();
 
-			if (dataAnomalyConf < anomalyLevel_){
+			if (dataAnomalyConf < anomaly_level_){
 				calledFunc = true;
 				func(model_results, data);
 			}
 		} else {
-			initialData_.push_back(data);
-			if(initialData_.size() == (size_t)predictionDelay_)
-				stacker_ = new stacker(models_, initialData_, max_stored_data_points_);
+			initial_data_.push_back(data);
+			if(initial_data_.size() == (size_t)prediction_delay_)
+				stacker_ = new stacker(models_, initial_data_, max_stored_data_points_);
 		}
 	}
 	last_data_ = next_data;
@@ -87,7 +87,7 @@ void AnomalyDetectionSystem::add_derived_features(vector<double>& data)
 
 	double lastStamp = last_tp_.tv_sec + last_tp_.tv_usec / 1000.0 / 1000.0;
 
-	if (derivedFeatures_.find("delta") != derivedFeatures_.end()){
+	if (derived_features_.find("delta") != derived_features_.end()){
 		int len = data.size();
 		for (int i = 0; i < len; ++i){
 			data.push_back(data[i] - last_data_[i]);
@@ -112,19 +112,19 @@ void AnomalyDetectionSystem::add_implied_features(vector<double>& data)
 
 	
 
-	if (derivedFeatures_.find("weekday") != derivedFeatures_.end())
+	if (derived_features_.find("weekday") != derived_features_.end())
 		data.push_back(wday);
-	if (derivedFeatures_.find("time") != derivedFeatures_.end())
+	if (derived_features_.find("time") != derived_features_.end())
 		data.push_back(min);
-	if (derivedFeatures_.find("date") != derivedFeatures_.end())
+	if (derived_features_.find("date") != derived_features_.end())
 		data.push_back(date);
-	if (derivedFeatures_.find("month") != derivedFeatures_.end())
+	if (derived_features_.find("month") != derived_features_.end())
 		data.push_back(month);
 }
 
-bool AnomalyDetectionSystem::readyForProcessing()
+bool AnomalyDetectionSystem::ready_for_processing()
 {
-	if (derivedFeatures_.find("delta") != derivedFeatures_.end()){
+	if (derived_features_.find("delta") != derived_features_.end()){
 		if (last_data_.empty())
 			return false;
 	}
@@ -133,10 +133,10 @@ bool AnomalyDetectionSystem::readyForProcessing()
 
 bool AnomalyDetectionSystem::violate_barriers(vector<double>& data)
 {
-	for (size_t i = 0; i < Barriers_.size(); ++i){
+	for (size_t i = 0; i < barriers_.size(); ++i){
 		double point = data[i];
-		for (size_t j = 0; j < Barriers_[i].size(); j += 2){
-			if (point >= Barriers_[i][j] && point <= Barriers_[i][j + 1])
+		for (size_t j = 0; j < barriers_[i].size(); j += 2){
+			if (point >= barriers_[i][j] && point <= barriers_[i][j + 1])
 				return true;
 		}
 	}

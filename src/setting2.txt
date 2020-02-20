@@ -1,0 +1,6 @@
+anomaly_level = 0.05
+maximum_stored_points = 1000
+feature_exclude = 
+models_exclude = 
+barriers = {[-inf, 0], [1, 2], [1.5, 10], [15, 20], [25, inf]},{[-inf, 0], [1, 2], [1.5, 10], [15, 20], [25, inf]}
+prediction_delay = 500

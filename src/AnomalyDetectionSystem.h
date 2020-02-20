@@ -11,7 +11,7 @@ class AnomalyDetectionSystem
 public:
 	typedef void (*anomaly_detected_call_func)(vector<double> model_results, vector<double> data);
 
-	AnomalyDetectionSystem(string filePath = "");
+	AnomalyDetectionSystem(string file_name = "");
 	~AnomalyDetectionSystem();
 	
 	void process_input(vector<double> data, anomaly_detected_call_func func);
@@ -20,24 +20,21 @@ public:
 private:
 	stacker *stacker_;
 	
-	set<string> derivedFeatures_;
+	set<string> derived_features_;
 
 	vector<string> models_;
-	vector<vector<double>> Barriers_;
-	vector<vector<double>> initialData_;
+	vector<vector<double>> barriers_;
+	vector<vector<double>> initial_data_;
 	vector<double> last_data_;
 
-	int predictionDelay_, max_stored_data_points_;
-	double anomalyLevel_;
+	int prediction_delay_, max_stored_data_points_;
+	double anomaly_level_;
 	struct timeval last_tp_;
 
-	bool readyForProcessing();
+	bool ready_for_processing();
 	void add_derived_features(vector<double>& data);
 	void add_implied_features(vector<double>& data);
 	bool violate_barriers(vector<double>& data);
-
-
-
 };
 
 #endif
