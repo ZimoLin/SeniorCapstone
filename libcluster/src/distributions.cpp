@@ -355,20 +355,6 @@ void distributions::GaussWish::clearobs ()
   this->xx_s = MatrixXd::Zero(D,D);
 }
 
-
-VectorXd distributions::GaussWish::normalized_likelihood (const MatrixXd& X) const
-{
-  VectorXd elogX = Eloglike(X);
-
-  for (size_t i = 0; i < elogX.size(); ++i)
-    elogX(i) = exp(elogX(i));
-
-  double sumpsi = mxdigamma((this->nu+1-enumdims(this->D)).matrix()/2).sum();
-  double correction = exp(0.5 * (sumpsi + this->logdW - this->D * (1/this->beta + log(pi)))); 
-  return elogX / correction;
-}
-
-
 VectorXd distributions::GaussWish::Eloglike (const MatrixXd& X) const
 {
   // Expectations of log Gaussian likelihood

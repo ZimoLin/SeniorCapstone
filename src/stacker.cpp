@@ -6,22 +6,22 @@
 using namespace std;
 using namespace Eigen;
 
-stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data)
+stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data, int max_stored_data_points)
 {
 	for (string model_name : model_list){
 		if (model_name == "BGMM"){
-			BGMM *bgmm = new BGMM(initial_data);
+			BGMM *bgmm = new BGMM(initial_data, max_stored_data_points);
 			Models_.push_back(bgmm);
 		}
 	}
 
 	VectorXd a_m0;
-	a_m0.setOnes(model_list.size() + 1);
-	a_m0 = a_m0 / model_list.size();
-	a_m0(model_list.size()) = 0;
+	a_m0.setOnes(Models_.size() + 1);
+	a_m0 = a_m0 / Models_.size();
+	a_m0(Models_.size()) = 0;
 
 	VectorXd temp;
-	temp.setOnes(model_list.size() + 1);
+	temp.setOnes(Models_.size() + 1);
 	MatrixXd m_S0 = temp.asDiagonal();
 
 	double beta = 1.0;
@@ -44,9 +44,10 @@ vector<double> stacker::process_input(vector<double> input_data)
 		model_predictions(i) = tempRes;
 		res.push_back(tempRes);
 	}
-
 	model_predictions(Models_.size()) = 1.0;
+
 	res.push_back(inverse_logit(stacking_model_->prediction_limit(model_predictions, 0.0)(0)));
+
 	return res;
 }
 

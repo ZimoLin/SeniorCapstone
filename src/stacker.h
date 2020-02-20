@@ -10,7 +10,7 @@
 class stacker
 {
 public:
-	stacker(vector<string> model_list, vector<vector<double>> initial_data);
+	stacker(vector<string> model_list, vector<vector<double>> initial_data, int max_stored_data_points);
 	~stacker();
 
 	vector<double> process_input(vector<double> input_data);

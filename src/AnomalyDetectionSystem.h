@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include "stacker.h"
+#include <sys/time.h>
 
 class AnomalyDetectionSystem
 {
@@ -18,18 +19,24 @@ public:
 
 private:
 	stacker *stacker_;
-	double anomalyLevel_;
+	
 	set<string> derivedFeatures_;
+
 	vector<string> models_;
 	vector<vector<double>> Barriers_;
 	vector<vector<double>> initialData_;
 	vector<double> last_data_;
-	int predictionDelay_;
+
+	int predictionDelay_, max_stored_data_points_;
+	double anomalyLevel_;
+	struct timeval last_tp_;
 
 	bool readyForProcessing();
 	void add_derived_features(vector<double>& data);
 	void add_implied_features(vector<double>& data);
 	bool violate_barriers(vector<double>& data);
+
+
 
 };
 

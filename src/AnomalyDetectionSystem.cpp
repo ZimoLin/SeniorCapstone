@@ -3,17 +3,31 @@
 #include "BGMM.h"
 #include <sys/time.h>
 #include<limits>
+#include "setting_helper.h"
 
 using namespace std::chrono;
 using namespace std;
 
-AnomalyDetectionSystem::AnomalyDetectionSystem(string filePath)
+AnomalyDetectionSystem::AnomalyDetectionSystem(string fileName)
 {
-	(void) filePath;
-	anomalyLevel_ = 0.05;
-	derivedFeatures_ = {"delta", "time", "weekday", "date", "month"};
-	models_ = {"BGMM"};
-	predictionDelay_ = 5000;
+	if (fileName.empty()){
+		anomalyLevel_ = 0.05;
+		derivedFeatures_ = {"delta", "weekday", "time", "date", "month"};
+		models_ = {"BGMM"};
+		predictionDelay_ = 1000;
+		Barriers_ = vector<vector<double>>();		
+		max_stored_data_points_ = 1000;
+	} else {
+		setting_helper helper;
+		Setting userSetting = helper.parseSetting(fileName); 
+
+		anomalyLevel_ = userSetting.s_anomaly_level;
+		derivedFeatures_ = set<string>(userSetting.s_features.begin(), userSetting.s_features.end());
+		models_ = userSetting.s_models;
+		predictionDelay_ = userSetting.s_prediction_delay;
+		Barriers_ = userSetting.s_barriers;
+		max_stored_data_points_ = userSetting.s_max_store;
+	}	
 }
 
 AnomalyDetectionSystem::~AnomalyDetectionSystem()
@@ -24,15 +38,17 @@ AnomalyDetectionSystem::~AnomalyDetectionSystem()
 void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected_call_func func)
 {
 	bool calledFunc = false;
-	//add_implied_features(data);
+	add_implied_features(data);
 	vector<double> next_data = data;
 	vector<double> model_results(models_.size(), numeric_limits<double>::quiet_NaN());
 
 	if (readyForProcessing()){
+
 		add_derived_features(data);
 
 		if (stacker_){
 			model_results = stacker_->process_input(data);
+
 			double dataAnomalyConf = model_results.back();
 			model_results.pop_back();
 
@@ -43,10 +59,14 @@ void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected
 		} else {
 			initialData_.push_back(data);
 			if(initialData_.size() == (size_t)predictionDelay_)
-				stacker_ = new stacker(models_, initialData_);
+				stacker_ = new stacker(models_, initialData_, max_stored_data_points_);
 		}
 	}
 	last_data_ = next_data;
+	struct timeval tp;
+	gettimeofday(&tp, 0);
+	last_tp_ = tp;
+
 	if (!calledFunc && violate_barriers(data)){
 		func(model_results, data);
 	}
@@ -61,13 +81,19 @@ void AnomalyDetectionSystem::process_feedback(vector<double> model_results, vect
 
 void AnomalyDetectionSystem::add_derived_features(vector<double>& data)
 {
+	struct timeval tp;
+	gettimeofday(&tp, 0);
+	double timestamp = tp.tv_sec + tp.tv_usec / 1000.0 /1000.0;
+
+	double lastStamp = last_tp_.tv_sec + last_tp_.tv_usec / 1000.0 / 1000.0;
+
 	if (derivedFeatures_.find("delta") != derivedFeatures_.end()){
 		int len = data.size();
 		for (int i = 0; i < len; ++i){
 			data.push_back(data[i] - last_data_[i]);
 		}
 	}
-
+	data.push_back(timestamp - lastStamp);
 }
 
 void AnomalyDetectionSystem::add_implied_features(vector<double>& data)
@@ -84,9 +110,7 @@ void AnomalyDetectionSystem::add_implied_features(vector<double>& data)
 	double date = ptm->tm_mday;
 	double month = ptm->tm_mon;
 
-	struct timeval tp;
-	gettimeofday(&tp, 0);
-	double timestamp = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+	
 
 	if (derivedFeatures_.find("weekday") != derivedFeatures_.end())
 		data.push_back(wday);
@@ -96,8 +120,6 @@ void AnomalyDetectionSystem::add_implied_features(vector<double>& data)
 		data.push_back(date);
 	if (derivedFeatures_.find("month") != derivedFeatures_.end())
 		data.push_back(month);
-
-	data.push_back(timestamp);
 }
 
 bool AnomalyDetectionSystem::readyForProcessing()

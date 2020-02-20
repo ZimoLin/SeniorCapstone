@@ -1,73 +1,22 @@
 #include "model.h"
 #include "BGMM.h"
 #include <iostream>
-#include "BayesianLinearReg.h"
+#include <random>
+#include <chrono>
 
 using namespace std;
 using namespace Eigen;
 
-int main(int argc, char const *argv[])
+int main()
 {
-	(void) argc;
-	(void) argv;
-	
-	VectorXd a_m0(2);
-	a_m0(0) = 0;
-	a_m0(1) = 0;
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  	default_random_engine generator (seed);
+  	normal_distribution<double> distribution1 (0.0,1);
 
-	MatrixXd m_s0(2, 2);
-	m_s0(0, 0) = 1;
-	m_s0(1, 1) = 1;
-	m_s0(0, 1) = 0;
-	m_s0(1, 0) = 0;
-
-	double beta = 1.0;
-	BayesianLinearReg model(a_m0, m_s0, beta);
-
-	MatrixXd a_x(6, 2);
-	
-	a_x << 1, -1,
-		   2, -1,
-		   1, -2,
-		   2, 0,
-		   4, 2,
-		   -3, 5;
-	
-	
-
-	VectorXd a_t(6);
-
-	a_t << 0, 1, -1, 2, 6, 2;
-
-	model.set_posterior(a_x, a_t);
-
-	MatrixXd a_x1(1, 2);
-	a_x1(0, 0) = 1;
-	a_x1(0, 1) = 1;
-
-	MatrixXd a_x2(1, 2);
-	a_x2(0, 0) = 10;
-	a_x2(0, 1) = 10;
-
-	MatrixXd a_x3(1, 2);
-	a_x3(0, 0) = 10;
-	a_x3(0, 1) = 0;
-
-	MatrixXd a_x4(1, 2);
-	a_x4(0, 0) = 0;
-	a_x4(0, 1) = 10;
-
-	double stdevs1 = 0.0;
-	double stdevs2 = 2.0;
-
-	cout << "ax = {1, 1}, stdev = 0.0: " << model.prediction_limit(a_x1, stdevs1) << endl;
-	cout << "ax = {1, 1}, stdev = 2.0: " << model.prediction_limit(a_x1, stdevs2) << endl;
-	cout << "ax = {10, 10}, stdev = 0.0: " << model.prediction_limit(a_x2, stdevs1) << endl;
-	cout << "ax = {10, 10}, stdev = 2.0: " << model.prediction_limit(a_x2, stdevs2) << endl;
-	cout << "ax = {10, 0}, stdev = 0.0: " << model.prediction_limit(a_x3, stdevs1) << endl;
-	cout << "ax = {10 , 0}, stdev = 2.0: " << model.prediction_limit(a_x3, stdevs2) << endl;
-	cout << "ax = {0, 10}, stdev = 0.0: " << model.prediction_limit(a_x4, stdevs1) << endl;
-	cout << "ax = {0, 10}, stdev = 2.0: " << model.prediction_limit(a_x4, stdevs2) << endl;
-
-	return 0;
+  	vector<vector<double>> data;
+  	for (int i = 0; i < 100; i++)
+  		data.push_back({distribution1(generator), distribution1(generator)});
+	BGMM bgmm(data, 50);	
+	bgmm.updateSetting(true);	
+	bgmm.process_input({1, 1});
 }

@@ -1,0 +1,1180 @@
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+-0.5
+This is the 1 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+0.5
+0
+1
+0.000146866
+This is the 2 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+1.25
+0
+0.75
+7.10487e-05
+This is the 3 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+1.5
+0
+0.25
+6.79493e-05
+This is the 4 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+1.75
+0
+0.25
+6.79493e-05
+This is the 5 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+2.25
+0
+0.5
+6.58035e-05
+This is the 6 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+12.5
+0
+10.25
+6.79493e-05
+This is the 7 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+17.5
+0
+5
+6.69956e-05
+This is the 8 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+22.5
+0
+5
+6.69956e-05
+This is the 9 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+-0.5
+27.5
+0
+5
+6.60419e-05
+This is the 10 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+-0.5
+1
+-28
+6.69956e-05
+This is the 11 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+1.25
+0
+0.75
+2.86102e-06
+This is the 12 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+1.5
+0
+0.25
+6.60419e-05
+This is the 13 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+1.75
+0
+0.25
+6.69956e-05
+This is the 14 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+2.25
+0
+0.5
+6.69956e-05
+This is the 15 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+17.5
+0
+5
+1.90735e-06
+This is the 16 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+0.5
+27.5
+0
+5
+1.90735e-06
+This is the 17 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+-0.5
+0.75
+-28
+6.69956e-05
+This is the 18 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+0.5
+0
+1
+6.81877e-05
+This is the 19 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+1.25
+0
+0.75
+6.60419e-05
+This is the 20 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+1.5
+0
+0.25
+6.58035e-05
+This is the 21 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+1.75
+0
+0.25
+7.10487e-05
+This is the 22 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+2.25
+0
+0.5
+6.60419e-05
+This is the 23 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+12.5
+0
+10.25
+6.69956e-05
+This is the 24 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+17.5
+0
+5
+6.79493e-05
+This is the 25 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+22.5
+0
+5
+6.69956e-05
+This is the 26 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.25
+27.5
+0
+5
+6.60419e-05
+This is the 27 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+-0.5
+0.25
+-28
+6.69956e-05
+This is the 28 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+0.5
+0
+1
+6.81877e-05
+This is the 29 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+1.25
+0
+0.75
+6.60419e-05
+This is the 30 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+1.5
+0
+0.25
+6.69956e-05
+This is the 31 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+1.75
+0
+0.25
+7.41482e-05
+This is the 32 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+2.25
+0
+0.5
+7.41482e-05
+This is the 33 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+12.5
+0
+10.25
+8.41618e-05
+This is the 34 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+17.5
+0
+5
+7.70092e-05
+This is the 35 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+22.5
+0
+5
+7.20024e-05
+This is the 36 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.5
+27.5
+0
+5
+7.70092e-05
+This is the 37 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+-0.5
+0.25
+-28
+7.10487e-05
+This is the 38 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+0.5
+0
+1
+6.91414e-05
+This is the 39 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+1.25
+0
+0.75
+7.00951e-05
+This is the 40 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+1.5
+0
+0.25
+6.00815e-05
+This is the 41 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+1.75
+0
+0.25
+4.1008e-05
+This is the 42 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+2.25
+0
+0.5
+4.00543e-05
+This is the 43 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+12.5
+0
+10.25
+4.19617e-05
+This is the 44 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+17.5
+0
+5
+3.91006e-05
+This is the 45 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+22.5
+0
+5
+3.91006e-05
+This is the 46 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+1.75
+27.5
+0
+5
+7.41482e-05
+This is the 47 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+-0.5
+0.5
+-28
+3.91006e-05
+This is the 48 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+0.5
+0
+1
+3.88622e-05
+This is the 49 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+1.25
+0
+0.75
+3.88622e-05
+This is the 50 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+1.5
+0
+0.25
+3.79086e-05
+This is the 51 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+1.75
+0
+0.25
+3.91006e-05
+This is the 52 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+2.25
+0
+0.5
+3.79086e-05
+This is the 53 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+12.5
+0
+10.25
+3.79086e-05
+This is the 54 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+17.5
+0
+5
+4.19617e-05
+This is the 55 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+22.5
+0
+5
+3.79086e-05
+This is the 56 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+2.25
+27.5
+0
+5
+3.88622e-05
+This is the 57 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+-0.5
+10.25
+-28
+3.79086e-05
+This is the 58 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+1.25
+0
+0.75
+1.90735e-06
+This is the 59 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+1.5
+0
+0.25
+3.91006e-05
+This is the 60 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+1.75
+0
+0.25
+3.91006e-05
+This is the 61 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+2.25
+0
+0.5
+3.91006e-05
+This is the 62 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+17.5
+0
+5
+1.90735e-06
+This is the 63 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+12.5
+27.5
+0
+5
+2.86102e-06
+This is the 64 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+-0.5
+5
+-28
+3.88622e-05
+This is the 65 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+0.5
+0
+1
+3.88622e-05
+This is the 66 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+1.25
+0
+0.75
+3.79086e-05
+This is the 67 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+1.5
+0
+0.25
+3.91006e-05
+This is the 68 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+1.75
+0
+0.25
+3.91006e-05
+This is the 69 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+2.25
+0
+0.5
+3.91006e-05
+This is the 70 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+12.5
+0
+10.25
+3.8147e-05
+This is the 71 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+17.5
+0
+5
+3.91006e-05
+This is the 72 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+22.5
+0
+5
+3.8147e-05
+This is the 73 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+17.5
+27.5
+0
+5
+3.91006e-05
+This is the 74 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+-0.5
+5
+-28
+3.8147e-05
+This is the 75 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+1.25
+0
+0.75
+1.90735e-06
+This is the 76 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+1.5
+0
+0.25
+3.88622e-05
+This is the 77 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+1.75
+0
+0.25
+3.88622e-05
+This is the 78 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+2.25
+0
+0.5
+5.19753e-05
+This is the 79 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+17.5
+0
+5
+2.86102e-06
+This is the 80 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+22.5
+27.5
+0
+5
+1.90735e-06
+This is the 81 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+-0.5
+5
+-28
+3.88622e-05
+This is the 82 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+0.5
+0
+1
+3.88622e-05
+This is the 83 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+1.25
+0
+0.75
+3.91006e-05
+This is the 84 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+1.5
+0
+0.25
+3.91006e-05
+This is the 85 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+1.75
+0
+0.25
+3.91006e-05
+This is the 86 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+2.25
+0
+0.5
+3.91006e-05
+This is the 87 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+12.5
+0
+10.25
+3.91006e-05
+This is the 88 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+17.5
+0
+5
+3.91006e-05
+This is the 89 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+22.5
+0
+5
+3.91006e-05
+This is the 90 anomalies count
+
+printing model results:
+
+nan
+
+printing data:
+
+27.5
+27.5
+0
+5
+3.91006e-05
+This is the 91 anomalies count
