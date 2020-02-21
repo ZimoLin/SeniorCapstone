@@ -14,7 +14,7 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 		anomaly_level_ = 0.05;
 		derived_features_ = {"delta", "weekday", "time", "date", "month"};
 		models_ = {"BGMM"};
-		prediction_delay_ = 1000;
+		prediction_delay_ = 500;
 		barriers_ = vector<vector<double>>();		
 		max_stored_data_points_ = 1000;
 	} else {
@@ -27,6 +27,8 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 		prediction_delay_ = user_setting.s_prediction_delay;
 		barriers_ = user_setting.s_barriers;
 		max_stored_data_points_ = user_setting.s_max_store;
+
+		cout << prediction_delay_ << endl;
 	}	
 }
 

@@ -31,7 +31,7 @@ Setting setting_helper::parse_setting(string fname) {
     //int [] features_idx = {1,1,1,1,1,1};
     vector<string> models_use = models;
     vector<string> features_use = features;
-    int prediction_delay = 500;
+    int prediction_delay = 1000;
     int maxSize = 100;
 
 
