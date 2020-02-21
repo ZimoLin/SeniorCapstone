@@ -2,7 +2,7 @@ CC = clang++
 CFLAGS = -Wall -Wextra -g -std=c++14 -c -I/usr/local/include/libcluster -I/usr/local/include/eigen3
 LDFLAGS = -L/usr/local/lib/  $(LDLIBS)
 LDLIBS = -lcluster
-DEPS = BGMM.h model.h BayesianLinearReg.h stacker.h AnomalyDetectionSystem.h setting_helper.h
+DEPS = BGMM.h model.h BayesianLinearReg.h stacker.h AnomalyDetectionSystem.h setting_helper.h 
 
 %.o: %.cpp $(DEPS)
 	$(CC) -o $@ $< $(CFLAGS)
