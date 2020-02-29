@@ -37,10 +37,46 @@ long int delta_usec
 
 int main(int argc, char const *argv[])
 {
-	if (argc == 0){
+	if (argc <= 0 || argc > 1)
 		throw("Usage: ./testADS [dimension size]");
-	}
 	
+	int dim = stoi(argv[0]);
+	if (dim <= 0)
+		throw("Enter a number larger than 0;")
+	
+	AnomalyDetectionSystem ads;
+
+	unsigned seed = system_clock::now().time_since_epoch().count();
+  	default_random_engine generator (seed);
+  	normal_distribution<double> distribution1 (0.0,1);
+
+  	AnomalyDetectionSystem::anomaly_detected_call_func func = myFunc;
+
+  	 // Prime the ADS with 1000 samples from a standard normal distribution
+	for (int i = 0; i < 1000; ++i)
+		ads.process_input(vector<double>({distribution1(generator), distribution1(generator), distribution1(generator), distribution1(generator)}), func);
+
+    normal_distribution<double> distribution2 (0.0,10);
+
+    // Now that the variance has expanded, we will start to see anomalous samples appear
+	for (int i = 0; i < 0; ++i)
+		ads.process_input(vector<double>({distribution2(generator), distribution2(generator), distribution2(generator), distribution2(generator)}), func);
+
+    normal_distribution<double> distribution3 (0.0,10);
+
+    vector<vector<double>> data;
+
+    for (int i = 0; i < 1000; ++i){
+    	vector<double> cur;
+    	for (int j = 0; j < dim; ++j)
+    		cur.push_back(distribution3(generator));
+    	data.push_back(cur);
+    }
+
+
+
+
+
 }
 
 int main()
