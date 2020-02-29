@@ -30,6 +30,8 @@
 #include <time.h>
 #include <vector>
 
+using namepsace std;
+
 namespace IsolationForest
 {
 	/// This class represents a feature. Each sample has one or more features.
@@ -133,11 +135,12 @@ namespace IsolationForest
 	typedef std::map<std::string, Uint64Set> FeatureNameToValuesMap;
 
 	/// Isolation Forest implementation.
-	class Forest
+	class Forest : public model
 	{
 	public:
-		Forest();
+		Forest(vector<vector<double>> initial_input, int max_stored_data_points);
 		Forest(uint32_t numTrees, uint32_t subSamplingSize);
+
 		virtual ~Forest();
 
 		void SetRandomizer(Randomizer* newRandomizer);
@@ -149,6 +152,9 @@ namespace IsolationForest
 
 		std::string Dump() const;
 
+		double process_input(vector<double> input_data);
+		void process_feedback(vector<double> input_data, bool isAnomaly);
+
 	private:
 		Randomizer* m_randomizer; // Performs random number generation
 		FeatureNameToValuesMap m_featureValues; // Lists each feature and maps it to all unique values in the training set
@@ -156,8 +162,12 @@ namespace IsolationForest
 		uint32_t m_numTreesToCreate; // The maximum number of trees to create
 		uint32_t m_subSamplingSize; // The maximum depth of a tree
 
+		int max_stored_data_points; // TODO comment
+		vector<Sample> data_set; // TODO comment
+
 		NodePtr CreateTree(const FeatureNameToValuesMap& featureValues, size_t depth);
 		double Score(const Sample& sample, const NodePtr tree);
+		void push_data(vector<double> data);
 
 		void Destroy();
 		void DestroyRandomizer();
