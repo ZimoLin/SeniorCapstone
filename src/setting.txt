@@ -1,0 +1,6 @@
+anomaly_level = 0.05
+maximum_stored_points = 3000
+feature_exclude = 
+models_exclude = 
+barriers =
+prediction_delay = 1000

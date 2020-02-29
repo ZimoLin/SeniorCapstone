@@ -16,6 +16,11 @@ BayesianLinearReg::BayesianLinearReg(VectorXd a_m0, MatrixXd m_S0, double beta)
 	this->posterior_ = this->prior_;
 }
 
+// BayesianLinearReg::BayesianLinearReg(string saved_state)
+// {
+// 	//TODO
+// }
+
 BayesianLinearReg::~BayesianLinearReg()
 {
 
@@ -58,3 +63,8 @@ VectorXd BayesianLinearReg::prediction_limit(MatrixXd& a_x, double stdevs)
 
 	return prediction;
 }
+
+// string BayesianLinearReg::save_state()
+// {
+// 	//TODO
+// }

@@ -9,8 +9,12 @@ using namespace Eigen;
 stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data, int max_stored_data_points)
 {
 	for (string model_name : model_list){
-		if (model_name == "BGMM"){
+		if (model_name == "BGMM_REPRESENTATIVE"){
 			BGMM *bgmm = new BGMM(initial_data, max_stored_data_points);
+			Models_.push_back(bgmm);
+		} else if (model_name == "BGMM_RECENT"){
+			BGMM *bgmm = new BGMM(initial_data, max_stored_data_points);
+			bgmm->updateSetting(false);
 			Models_.push_back(bgmm);
 		}
 	}
@@ -28,6 +32,11 @@ stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data,
 
 	stacking_model_ = new BayesianLinearReg(a_m0, m_S0, beta);
 }
+
+// stacker::stacker(string saved_state)
+// {
+// 	//TODO
+// }
 
 stacker::~stacker()
 {
@@ -82,6 +91,11 @@ double stacker::inverse_logit(double p)
 {
 	return exp(p) / (1 + exp(p));
 }
+
+// string stacker::save_state()
+// {
+// 	//TODO
+// }
 
 
 

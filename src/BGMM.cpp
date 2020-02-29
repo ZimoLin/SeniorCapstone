@@ -27,6 +27,11 @@ BGMM::BGMM(vector<vector<double>> initial_data, int max_stored_data_points) : mo
         srand(seed);
 }
 
+// BGMM::BGMM(string saved_state) : model(saved_state)
+// {
+//     //TODO
+// }
+
 BGMM::~BGMM(){
 
 }
@@ -139,3 +144,8 @@ void BGMM::updateSetting(bool new_normalized_kept_points)
 {
     normalized_kept_points = new_normalized_kept_points;
 }
+
+// string BGMM::save_state()
+// {
+//     //TODO
+// }

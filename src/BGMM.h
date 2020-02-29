@@ -15,11 +15,13 @@ class BGMM : public model
 {
 public:
 	BGMM(vector<vector<double>> initial_data, int max_stored_data_points);
+	// BGMM(string saved_state);
 	~BGMM();
 	double process_input(vector<double> input_data);
 	void process_feedback(vector<double> input_data, bool isAnomaly);
 	void pushData(vector<double> input_data);
 	void updateSetting(bool new_normalized_kept_points);
+	// string save_state();
 private:
 	MatrixXd transformData(vector<double> input_data);
 

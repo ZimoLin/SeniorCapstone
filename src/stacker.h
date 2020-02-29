@@ -11,10 +11,12 @@ class stacker
 {
 public:
 	stacker(vector<string> model_list, vector<vector<double>> initial_data, int max_stored_data_points);
+	// stacker(string saved_state);
 	~stacker();
 
 	vector<double> process_input(vector<double> input_data);
 	void process_feedback(vector<double> model_outputs, vector<double> input_data, bool is_anamoly);
+	// string save_state();
 
 private:
 	vector<model*> Models_;

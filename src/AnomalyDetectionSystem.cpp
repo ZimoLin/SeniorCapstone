@@ -13,8 +13,8 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 	if (file_name.empty()){
 		anomaly_level_ = 0.05;
 		derived_features_ = {"delta", "weekday", "time", "date", "month"};
-		models_ = {"BGMM"};
-		prediction_delay_ = 500;
+		models_ = {"BGMM_REPRESENTATIVE", "BGMM_RECENT"};
+		prediction_delay_ = 1000;
 		barriers_ = vector<vector<double>>();		
 		max_stored_data_points_ = 1000;
 	} else {
@@ -144,3 +144,13 @@ bool AnomalyDetectionSystem::violate_barriers(vector<double>& data)
 	}
 	return false;
 }
+
+// void AnomalyDetectionSystem::initalize_from_saved_state(string saved_state)
+// {
+// 	//TODO
+// }
+
+// string AnomalyDetectionSystem::save_state()
+// {
+// 	//TODO
+// }

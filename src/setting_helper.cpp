@@ -24,7 +24,7 @@ Setting setting_helper::parse_setting(string fname) {
     string line;
     ifstream myfile (fname);
     double anomaly_level = 0.8;
-    vector<string> models ({"ARIMA", "BGMM","IFORESTS","OTHER_MODEL"});
+    vector<string> models ({"ARIMA", "BGMM_REPRESENTATIVE", "BGMM_RECENT", "IFORESTS","OTHER_MODEL"});
     //int [] models_idx = {1,1,1,1};
     vector<vector<double>> barriers;
     vector<string> features ({"deltas_of_data", "delta_timestamp", "day_of_week", "time_of_day","month", "date"});
@@ -227,7 +227,7 @@ void setting_helper::create_setting()
         cout << "" << endl;
     }
     //model_exclude 
-    cout << "Please input the models to be excluded, separated by a comma and a space. Ex: \"BGMM, ARIMA, IFORESTS\"." << endl;
+    cout << "Please input the models to be excluded, separated by a comma and a space. Ex: \"BGMM_RECENT, BGMM_REPRESENTATIVE, ARIMA, IFORESTS\"." << endl;
     cout << "We suggest that this is left blank to include all models." << endl;
     std::getline(std::cin, m_exclude);
     outfile << "models_exclude = " << m_exclude << endl;
