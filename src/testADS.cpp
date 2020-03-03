@@ -10,14 +10,14 @@ using namespace std::chrono;
 int anomalyCount = 0;
 
 void myFunc(vector<double> model_results, vector<double> data){
-    cout << "\n Anomaly Detected\n" << endl;
+    /*cout << "\n Anomaly Detected\n" << endl;
 	cout << "\n Model results:\n" << endl;
 	for (double d : model_results)
 		cout << d << endl;
 
 	cout << "\n Data:\n" << endl;
 	for (double d : data)
-		cout << d << endl;
+		cout << d << endl;*/
 	cout << "This is the " << ++anomalyCount << " anomaly detected" << endl;
 }
 
@@ -37,12 +37,15 @@ long int delta_usec
 
 int main(int argc, char const *argv[])
 {
-	if (argc <= 0 || argc > 1)
-		throw("Usage: ./testADS [dimension size]");
+	if (argc <= 1 || argc > 3){
+		cout << "Usage: ./testADS [dimension] [max store points]" << endl;
+		return 0;
+	}
 	
-	int dim = stoi(argv[0]);
-	if (dim <= 0)
-		throw("Enter a number larger than 0;")
+	int dim = stoi(argv[1]);
+	int maxSize = stoi(argv[2]);
+	if (dim <= 0 || maxSize <= 0)
+		throw("Enter a number larger than 0 for the arguments.");
 	
 	AnomalyDetectionSystem ads;
 
@@ -52,15 +55,23 @@ int main(int argc, char const *argv[])
 
   	AnomalyDetectionSystem::anomaly_detected_call_func func = myFunc;
 
-  	 // Prime the ADS with 1000 samples from a standard normal distribution
-	for (int i = 0; i < 1000; ++i)
-		ads.process_input(vector<double>({distribution1(generator), distribution1(generator), distribution1(generator), distribution1(generator)}), func);
+  	cout << "Prime the ADS with 1000 samples from a standard normal distribution" << endl;
+	for (int i = 0; i < maxSize; ++i){
+		vector<double> cur;
+		for (int i = 0; i < dim; ++i)
+			cur.push_back(distribution1(generator));
+		ads.process_input(cur, func);
+	}
 
     normal_distribution<double> distribution2 (0.0,10);
 
-    // Now that the variance has expanded, we will start to see anomalous samples appear
-	for (int i = 0; i < 0; ++i)
-		ads.process_input(vector<double>({distribution2(generator), distribution2(generator), distribution2(generator), distribution2(generator)}), func);
+    cout <<  "Now that the variance has expanded, we will start to see anomalous samples appear" << endl;
+	for (int i = 0; i < 20; ++i){
+		vector<double> cur;
+		for (int i = 0; i < dim; ++i)
+			cur.push_back(distribution1(generator));
+		ads.process_input(cur, func);
+	}
 
     normal_distribution<double> distribution3 (0.0,10);
 
@@ -73,41 +84,14 @@ int main(int argc, char const *argv[])
     	data.push_back(cur);
     }
 
-
-
-
-
-}
-
-int main()
-{
-	AnomalyDetectionSystem ads;
-
-	unsigned seed = system_clock::now().time_since_epoch().count();
-  	default_random_engine generator (seed);
-  	normal_distribution<double> distribution1 (0.0,1);
-
-  	AnomalyDetectionSystem::anomaly_detected_call_func func = myFunc;
-
-    // Prime the ADS with 1000 samples from a standard normal distribution
-	for (int i = 0; i < 1000; ++i)
-		ads.process_input(vector<double>({distribution1(generator), distribution1(generator), distribution1(generator), distribution1(generator)}), func);
-
-    normal_distribution<double> distribution2 (0.0,10);
-
-    // Now that the variance has expanded, we will start to see anomalous samples appear
-	for (int i = 0; i < 0; ++i)
-		ads.process_input(vector<double>({distribution2(generator), distribution2(generator), distribution2(generator), distribution2(generator)}), func);
-
-    normal_distribution<double> distribution3 (0.0,10);
+    cout << "On the other hand, now that the variance has contracted, we will stop seeing anomalous samples." << endl;
 
     auto start = start_time();
-    // On the other hand, now that the variance has contracted, we will stop seeing anomalous samples
     for (int i = 0; i < 1000; ++i)
-        ads.process_input(vector<double>({distribution3(generator), distribution3(generator), distribution3(generator), distribution3(generator)}), func);
+        ads.process_input(data[i], func);
     
     double time = delta_usec(start)/1000.0;
-    cout << "10000 data points took " << time << " ms." << endl;
+    cout << "1000 data points took " << time << " ms." << endl;
 	return 0;
 }
 
