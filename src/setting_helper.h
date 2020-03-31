@@ -3,14 +3,12 @@
 
 #include<iostream>
 #include<fstream>
-#include <Eigen/Dense>
 #include <string>
 #include <cfloat>
 #include <algorithm>
 #include <vector>
 
 using namespace std;
-using namespace Eigen;
 
 typedef struct setting
 {
