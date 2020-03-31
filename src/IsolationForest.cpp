@@ -106,24 +106,25 @@ namespace IsolationForest
         }
 
         /// Constructor.
-        Forest::Forest(vector<vector<double>> initial_input, int max_stored_data_points) :
-                model(initial_input, max_stored_data_points)
+        Forest::Forest(vector<vector<double>> initial_input, int max_stored_data_points, int points_to_reconstruct) :
+                model(initial_input, max_stored_data_points, points_to_reconstruct)
         {
-        	this->m_randomizer = new Randomizer();
-        	this->m_numTreesToCreate = 10;
-        	this->m_subSamplingSize = 50;
-        	this->max_stored_data_points = max_stored_data_points;
+                this->m_randomizer = new Randomizer();
+                this->m_numTreesToCreate = 10;
+                this->m_subSamplingSize = 5;
+                this->max_stored_data_points = max_stored_data_points;
+                this->points_to_reconstruct_ = points_to_reconstruct;
             for (auto data : initial_input)
                 push_data(data);
         }
 
         /// Constructor.
         Forest::Forest(uint32_t numTrees, uint32_t subSamplingSize) :
-                model(vector<vector<double>>(), 0)
+                model(vector<vector<double>>(), 0, 0)
         {
-        	this->m_randomizer = new Randomizer();
-        	this->m_numTreesToCreate = numTrees;
-        	this->m_subSamplingSize = subSamplingSize;
+                this->m_randomizer = new Randomizer();
+                this->m_numTreesToCreate = numTrees;
+                this->m_subSamplingSize = subSamplingSize;
         }
 
 
@@ -226,9 +227,9 @@ namespace IsolationForest
                                         rightFeatureValueList.push_back(d);
                                 }
 
-                        		// rightFeatureValueList.erase(rightFeatureValueList.begin(), rightFeatureValueList.begin() + splitValueIndex + 1);
+                                        // rightFeatureValueList.erase(rightFeatureValueList.begin(), rightFeatureValueList.begin() + splitValueIndex + 1);
                                 // cout << "right: " << rightFeatureValueList.size() << endl;
-                        		tempFeatureValues[selectedFeatureIndex] = rightFeatureValueList;
+                                        tempFeatureValues[selectedFeatureIndex] = rightFeatureValueList;
                                 // Uint64Set rightFeatureValueSet = featureValueSet;
                                 // splitValueIter = rightFeatureValueSet.begin();
                                 // advance(splitValueIter, splitValueIndex + 1);
@@ -260,15 +261,36 @@ namespace IsolationForest
 
         double Forest::process_input(vector<double> input_data)
         {
-
-        	push_data(input_data);
-
-            Create();
-
+            push_data(input_data);
+            if (point_count_ == 0) {
+                Create();
+                point_count_ = points_to_reconstruct_;
+            }
+            point_count_--;
             double score = NormalizedScore(input_data);
+            double worse_values = 0;
+            for (size_t j = 0; j < m_featureValues[0].size(); ++j) {
+                    vector<double> comparison_data;
+                    for (size_t i = 0; i < m_featureValues.size(); ++i) {
+                        comparison_data.push_back(m_featureValues[i][j]);
+                    }
+                    double comparison_score = NormalizedScore(comparison_data);
+                    if (comparison_score <= score) {
+                        worse_values++;
+                    }
+            }
+            if (point_count_ == 0) {
+                Destroy();
+            }  
 
-            Destroy();
-            return score;
+            double proportional_likelihood = worse_values / m_featureValues[0].size();
+            cout << proportional_likelihood << endl;
+
+            if (proportional_likelihood > 0.999) 
+                    return 25.0;
+            else if (proportional_likelihood < 0.001)
+                    return -25.0;
+            return log(proportional_likelihood/(1-proportional_likelihood));
         }
 
         void Forest::process_feedback(vector<double> input_data, bool isAnomaly)
@@ -344,9 +366,8 @@ namespace IsolationForest
                                 score = pow(2, exponent);
                         }
                 }
-                double proportional_likelihood = 1 - score;
-                cout << proportional_likelihood << endl;
-                return log(proportional_likelihood / (1 - proportional_likelihood));
+                return 1 - score;
+
     }
 
     // push a new data point into feature value list.

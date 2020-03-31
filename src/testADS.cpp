@@ -69,11 +69,11 @@ int main(int argc, char const *argv[])
 	for (int i = 0; i < 20; ++i){
 		vector<double> cur;
 		for (int i = 0; i < dim; ++i)
-			cur.push_back(distribution1(generator));
+			cur.push_back(distribution2(generator));
 		ads.process_input(cur, func);
 	}
 
-    normal_distribution<double> distribution3 (0.0,10);
+    normal_distribution<double> distribution3 (0.0,0.1);
 
     vector<vector<double>> data;
 

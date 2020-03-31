@@ -91,7 +91,7 @@ namespace IsolationForest
     class Forest : public model
     {
     public:
-        Forest(vector<vector<double>> initial_input, int max_stored_data_points);
+        Forest(vector<vector<double>> initial_input, int max_stored_data_points, int points_to_reconstruct);
         Forest(uint32_t numTrees, uint32_t subSamplingSize);
 
         virtual ~Forest();
@@ -115,6 +115,9 @@ namespace IsolationForest
         uint32_t m_subSamplingSize; // The maximum depth of a tree
 
         int max_stored_data_points; // TODO comment
+        int points_to_reconstruct_;
+        int point_count_ = 0;
+
 
         NodePtr CreateTree(const vector<vector<double>>& featureValues, size_t depth);
         double Score(vector<double> data, const NodePtr tree);

@@ -63,7 +63,7 @@ private:
 	vector<vector<double>> initial_data_;
 	vector<double> last_data_;
 
-	int prediction_delay_, max_stored_data_points_;
+	int prediction_delay_, max_stored_data_points_, points_to_reconstruct_;
 	double anomaly_level_;
 	struct timeval last_tp_;
 

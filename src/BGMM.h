@@ -14,7 +14,7 @@ using namespace distributions;
 class BGMM : public model
 {
 public:
-	BGMM(vector<vector<double>> initial_data, int max_stored_data_points);
+	BGMM(vector<vector<double>> initial_data, int max_stored_data_points, int points_to_reconstruct);
 	// BGMM(string saved_state);
 	~BGMM();
 	double process_input(vector<double> input_data);
@@ -30,6 +30,11 @@ private:
 	int dSize = 0, dNum = 0, maxSize;
 	const double anomaly_level = .1;
 	bool normalized_kept_points;
+	int points_to_reconstruct_;
+	int point_count_ = 0;
+	MatrixXd qZ_;
+    Dirichlet weights_;
+    vector<GaussWish> clusters_;
 };
 
-#endif
+#endif 

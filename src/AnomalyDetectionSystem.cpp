@@ -17,6 +17,7 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 		prediction_delay_ = 1000;
 		barriers_ = vector<vector<double>>();		
 		max_stored_data_points_ = 1000;
+		points_to_reconstruct_ = 100;
 	} else {
 		setting_helper helper;
 		Setting user_setting = helper.parse_setting(file_name); 
@@ -27,6 +28,7 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 		prediction_delay_ = user_setting.s_prediction_delay;
 		barriers_ = user_setting.s_barriers;
 		max_stored_data_points_ = user_setting.s_max_store;
+		// Add points_to_reconstruct to settingHelper
 
 		cout << prediction_delay_ << endl;
 	}	
@@ -61,7 +63,7 @@ void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected
 		} else {
 			initial_data_.push_back(data);
 			if(initial_data_.size() == (size_t)prediction_delay_)
-				stacker_ = new stacker(models_, initial_data_, max_stored_data_points_);
+				stacker_ = new stacker(models_, initial_data_, max_stored_data_points_, points_to_reconstruct_);
 		}
 	}
 	last_data_ = next_data;

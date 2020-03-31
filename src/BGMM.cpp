@@ -15,10 +15,11 @@ using namespace distributions;
 
 
 
-BGMM::BGMM(vector<vector<double>> initial_data, int max_stored_data_points) : model(initial_data, max_stored_data_points)
+BGMM::BGMM(vector<vector<double>> initial_data, int max_stored_data_points, int points_to_reconstruct) : model(initial_data, max_stored_data_points, points_to_reconstruct)
 {
         maxSize = max_stored_data_points;
         normalized_kept_points = true;
+        points_to_reconstruct_ = points_to_reconstruct;
 
         for (vector<double> data : initial_data)
                 pushData(data);
@@ -38,25 +39,29 @@ BGMM::~BGMM(){
 
 double BGMM::process_input(vector<double> input_data){
         pushData(input_data);
+
         MatrixXd curData;
         curData.setZero(vData.size(), dSize);
 
         for (size_t i = 0; i < vData.size(); ++i)
                 curData.block(i, 0, 1, dSize) = vData[i];
 
-        MatrixXd qZ;
-        Dirichlet weights;
-        vector<GaussWish> clusters;
-        learnBGMM(curData, qZ, weights, clusters, PRIORVAL, -1, false, omp_get_max_threads());
+        if (point_count_ == 0) {
+            learnBGMM(curData, qZ_, weights_, clusters_, PRIORVAL, -1, false, omp_get_max_threads());
+            point_count_ = points_to_reconstruct_;
+        }
+        point_count_--;
+        
+        // learnBGMM(curData, qZ_, weights_, clusters_, PRIORVAL, -1, false, omp_get_max_threads());
 
         MatrixXd transformed_input = transformData(input_data);
-        int num_clusters = clusters.size();
+        int num_clusters = clusters_.size();
 
         double new_best_likelihood = 0;
 
-        for (size_t i = 0; i < clusters.size(); ++i){
-            double cluster_samples = qZ.col(i).sum();
-                double new_cluster_likelihood = exp((clusters[i].Eloglike(transformed_input)[0]));
+        for (size_t i = 0; i < clusters_.size(); ++i){
+            double cluster_samples = qZ_.col(i).sum();
+                double new_cluster_likelihood = exp((clusters_[i].Eloglike(transformed_input)[0]));
                 double anomalous_cluster_measure = (cluster_samples * num_clusters) / vData.size() / anomaly_level;
                 if (anomalous_cluster_measure < new_cluster_likelihood) {
                     new_cluster_likelihood = anomalous_cluster_measure;
@@ -69,9 +74,9 @@ double BGMM::process_input(vector<double> input_data){
         double worse_values = 0;
         for (size_t j = 0; j < vData.size(); ++j) {
             double curr_best_likelihood = 0;
-            for (size_t i = 0; i < clusters.size(); ++i){
-                double cluster_samples = qZ.col(i).sum();
-                double curr_cluster_likelihood = exp((clusters[i].Eloglike(vData[j])[0]));
+            for (size_t i = 0; i < clusters_.size(); ++i){
+                double cluster_samples = qZ_.col(i).sum();
+                double curr_cluster_likelihood = exp((clusters_[i].Eloglike(vData[j])[0]));
                 double anomalous_cluster_measure = (cluster_samples * num_clusters) / vData.size() / anomaly_level;
                 if (anomalous_cluster_measure < curr_cluster_likelihood) {
                     curr_cluster_likelihood = anomalous_cluster_measure;
