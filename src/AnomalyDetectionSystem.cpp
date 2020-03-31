@@ -13,7 +13,7 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 	if (file_name.empty()){
 		anomaly_level_ = 0.05;
 		derived_features_ = {"delta", "weekday", "time", "date", "month"};
-		models_ = {"BGMM_REPRESENTATIVE", "BGMM_RECENT"};
+		models_ = {"IFORESTS"};
 		prediction_delay_ = 1000;
 		barriers_ = vector<vector<double>>();		
 		max_stored_data_points_ = 1000;

@@ -1,14 +1,6 @@
-#include<iostream>
-#include<fstream>
-#include <Eigen/Dense>
-#include <string>
-#include <cfloat>
-#include <algorithm>
-#include <vector>
 #include "setting_helper.h"
 
 using namespace std;
-using namespace Eigen;
 
 setting_helper::setting_helper()
 {
@@ -32,7 +24,7 @@ Setting setting_helper::parse_setting(string fname) {
     vector<string> models_use = models;
     vector<string> features_use = features;
     int prediction_delay = 1000;
-    int maxSize = 100;
+    int maxSize = 1000;
 
 
     if (myfile.is_open()) {
@@ -259,6 +251,48 @@ void setting_helper::create_setting()
             cout << "" << endl;
         }
         if (temp_bar.compare("n") == 0) break;
+
+        //check if the input barrier is valid
+        bool reset = false;
+        size_t left_bk = 0;
+        size_t right_bk = 0;
+        size_t comma = 0;
+        if (temp_bar.compare("") != 0) {
+
+            while (right_bk != temp_bar.length() - 1) {
+
+                left_bk  = temp_bar.find("[", right_bk);
+                comma    = temp_bar.find(",", right_bk+2);
+                right_bk = temp_bar.find("]", right_bk+1);
+                string lower_b = temp_bar.substr(left_bk + 1,comma - left_bk - 1);
+                string upper_b = temp_bar.substr(comma + 1, right_bk - comma - 1);
+
+                double lower_bd, upper_bd;
+
+                if (lower_b.compare("-inf") == 0) {
+                    lower_bd = -DBL_MAX;
+                } else {
+                    lower_bd = stod(lower_b);
+                }
+                if (upper_b.compare("inf") == 0) {
+                    upper_bd = DBL_MAX;
+                } else {
+                    upper_bd = stod(upper_b);
+                }
+
+                if (upper_bd < lower_bd) {
+                    cout << "One or more upper bound is lower than its lower bound. Please re-enter all bounds for the barrier of the current dimension." << endl;
+                    reset = true;
+                    break;
+                }
+            }
+        }
+        if (reset == true) {
+            reset = false;
+            continue;
+        }
+        /////////
+
         temp_bar = "{" + temp_bar + "}";
         final_bar = final_bar + "," + temp_bar;
         looper ++;

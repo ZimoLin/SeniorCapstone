@@ -10,14 +10,14 @@ using namespace std::chrono;
 int anomalyCount = 0;
 
 void myFunc(vector<double> model_results, vector<double> data){
-    /*cout << "\n Anomaly Detected\n" << endl;
+    cout << "\n Anomaly Detected\n" << endl;
 	cout << "\n Model results:\n" << endl;
 	for (double d : model_results)
 		cout << d << endl;
 
 	cout << "\n Data:\n" << endl;
 	for (double d : data)
-		cout << d << endl;*/
+		cout << d << endl;
 	cout << "This is the " << ++anomalyCount << " anomaly detected" << endl;
 }
 
@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
   	AnomalyDetectionSystem::anomaly_detected_call_func func = myFunc;
 
   	cout << "Prime the ADS with 1000 samples from a standard normal distribution" << endl;
-	for (int i = 0; i < maxSize; ++i){
+	for (int i = 0; i < maxSize + 1; ++i){
 		vector<double> cur;
 		for (int i = 0; i < dim; ++i)
 			cur.push_back(distribution1(generator));

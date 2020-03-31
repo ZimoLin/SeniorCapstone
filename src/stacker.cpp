@@ -2,9 +2,11 @@
 #include <cmath>
 #include <Eigen/Dense>
 #include "BGMM.h"
+#include "IsolationForest.h"
 
 using namespace std;
 using namespace Eigen;
+using namespace IsolationForest;
 
 stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data, int max_stored_data_points)
 {
@@ -16,6 +18,9 @@ stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data,
 			BGMM *bgmm = new BGMM(initial_data, max_stored_data_points);
 			bgmm->updateSetting(false);
 			Models_.push_back(bgmm);
+		} else if (model_name == "IFORESTS"){
+			Forest *iforest = new Forest(initial_data, max_stored_data_points);
+			Models_.push_back(iforest);
 		}
 	}
 
