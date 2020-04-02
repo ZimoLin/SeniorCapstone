@@ -41,7 +41,7 @@ namespace IsolationForest
     {
     public:
         Node();
-        Node(size_t index, double splitValue);
+        Node(size_t index, double splitValue, int count);
         virtual ~Node();
 
         virtual size_t Index() const { return m_index; };
@@ -52,12 +52,14 @@ namespace IsolationForest
 
         void SetLeftSubTree(Node* subtree);
         void SetRightSubTree(Node* subtree);
+        int getCount();
 
         std::string Dump() const;
 
     private:
         size_t m_index;
         double m_splitValue;
+        int m_count = 0;
 
         Node* m_left;
         Node* m_right;
@@ -97,6 +99,7 @@ namespace IsolationForest
         virtual ~Forest();
 
         void SetRandomizer(Randomizer* newRandomizer);
+        NodePtr CreateTree(const vector<vector<double>>& featureValues, const vector<vector<double>>& trainData, size_t depth);
         void Create();
 
         double Score(vector<double> data);
@@ -110,6 +113,7 @@ namespace IsolationForest
     private:
         Randomizer* m_randomizer; // Performs random number generation
         vector<vector<double>> m_featureValues; // Lists each feature and maps it to all unique values in the training set
+        vector<vector<double>> m_trainData;
         NodePtrList m_trees; // The decision trees that comprise the forest
         uint32_t m_numTreesToCreate; // The maximum number of trees to create
         uint32_t m_subSamplingSize; // The maximum depth of a tree

@@ -37,9 +37,10 @@ namespace IsolationForest
         }
 
         /// Constructor.
-        Node::Node(size_t index, double splitValue) :
+        Node::Node(size_t index, double splitValue, int count) :
                 m_index(index),
                 m_splitValue(splitValue),
+                m_count(count),
                 m_left(NULL),
                 m_right(NULL)
         {
@@ -81,6 +82,11 @@ namespace IsolationForest
                         m_right = NULL;
                 }
         }
+        int Node::getCount()
+        {
+            return m_count;
+        }
+
 
         /// Returns the node as a JSON string.
         string Node::Dump() const
@@ -144,7 +150,7 @@ namespace IsolationForest
 
         /// Creates and returns a single tree. As this is a recursive function,
         /// depth indicates the current depth of the recursion.
-        NodePtr Forest::CreateTree(const vector<vector<double>>& featureValues, size_t depth)
+        NodePtr Forest::CreateTree(const vector<vector<double>>& featureValues, const vector<vector<double>>& trainData, size_t depth)
         {
 
                 // Sanity check.
@@ -184,7 +190,7 @@ namespace IsolationForest
                 double splitValue = featureValueList[splitValueIndex];
 
                 // Create a tree node to hold the split value.
-                NodePtr tree = new Node(selectedFeatureIndex, splitValue);
+                NodePtr tree = new Node(selectedFeatureIndex, splitValue, trainData.size());
 
                 if (tree)
                 {
@@ -195,6 +201,16 @@ namespace IsolationForest
                         for (vector<double> data : featureValues)
                             tempFeatureValues.push_back(data);
                         // vector<vector<double>> tempFeatureValues = featureValues;
+
+                        vector<vector<double>> leftTrainData;
+                        vector<vector<double>> rightTrainData;
+                        for (vector<double> data : trainData) {
+                            if (data[splitValueIndex] < splitValue) {
+                                leftTrainData.push_back(data);
+                            } else {
+                                rightTrainData.push_back(data);
+                            }
+                        }
 
                         // Create the left subtree.
 
@@ -214,7 +230,7 @@ namespace IsolationForest
                         // advance(splitValueIter, splitValueIndex);
                         // leftFeatureValueSet.erase(splitValueIter, leftFeatureValueSet.end());
                         // tempFeatureValues[selectedFeatureName] = leftFeatureValueSet;
-                        tree->SetLeftSubTree(CreateTree(tempFeatureValues, depth + 1));
+                        tree->SetLeftSubTree(CreateTree(tempFeatureValues, leftTrainData, depth + 1));
 
 
 
@@ -235,7 +251,7 @@ namespace IsolationForest
                                 // advance(splitValueIter, splitValueIndex + 1);
                                 // rightFeatureValueSet.erase(rightFeatureValueSet.begin(), splitValueIter);
                                 // tempFeatureValues[selectedFeatureName] = rightFeatureValueSet;
-                                tree->SetRightSubTree(CreateTree(tempFeatureValues, depth + 1));
+                                tree->SetRightSubTree(CreateTree(tempFeatureValues, rightTrainData, depth + 1));
                         }
 
                 }
@@ -250,7 +266,7 @@ namespace IsolationForest
 
                 for (size_t i = 0; i < m_numTreesToCreate; ++i)
                 {
-                        NodePtr tree = CreateTree(m_featureValues, 0);
+                        NodePtr tree = CreateTree(m_featureValues, m_trainData, 0);
 
                         if (tree)
                         {
@@ -269,12 +285,8 @@ namespace IsolationForest
             point_count_--;
             double score = NormalizedScore(input_data);
             double worse_values = 0;
-            for (size_t j = 0; j < m_featureValues[0].size(); ++j) {
-                    vector<double> comparison_data;
-                    for (size_t i = 0; i < m_featureValues.size(); ++i) {
-                        comparison_data.push_back(m_featureValues[i][j]);
-                    }
-                    double comparison_score = NormalizedScore(comparison_data);
+            for (size_t j = 0; j < m_trainData.size(); ++j) {
+                    double comparison_score = NormalizedScore(m_trainData[j]);
                     if (comparison_score <= score) {
                         worse_values++;
                     }
@@ -283,7 +295,7 @@ namespace IsolationForest
                 Destroy();
             }  
 
-            double proportional_likelihood = worse_values / m_featureValues[0].size();
+            double proportional_likelihood = worse_values / m_trainData.size();
             cout << proportional_likelihood << endl;
 
             if (proportional_likelihood > 0.999) 
@@ -307,8 +319,10 @@ namespace IsolationForest
                 double depth = (double)0.0;
 
                 NodePtr currentNode = tree;
+                NodePtr lastNode = NULL;
                 while (currentNode)
                 {
+                    lastNode = currentNode;
                     if (data[currentNode->Index()] < currentNode->SplitValue())
                     {
                             currentNode = currentNode->Left();
@@ -316,6 +330,9 @@ namespace IsolationForest
                         currentNode = currentNode->Right();
                     }
                     ++depth;
+                }
+                if (lastNode != NULL) {
+                    depth += log2(lastNode->getCount());
                 }
                 return depth;
         }
@@ -373,6 +390,7 @@ namespace IsolationForest
     // push a new data point into feature value list.
     void Forest::push_data(vector<double> data)
     {
+        m_trainData.push_back(data);
         if (m_featureValues.size() == 0) {
             for (size_t i = 0; i < data.size(); ++i) {
                 vector<double> featureValueList;
