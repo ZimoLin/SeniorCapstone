@@ -19,8 +19,12 @@ stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data,
 			BGMM *bgmm = new BGMM(initial_data, max_stored_data_points, points_to_reconstruct);
 			bgmm->updateSetting(false);
 			Models_.push_back(bgmm);
-		} else if (model_name == "IFORESTS"){
+		} else if (model_name == "IFORESTS_REPRESENTATIVE"){
 			Forest *iforest = new Forest(initial_data, max_stored_data_points, points_to_reconstruct);
+			Models_.push_back(iforest);
+		} else if (model_name == "IFORESTS_RECENT"){
+			Forest *iforest = new Forest(initial_data, max_stored_data_points, points_to_reconstruct);
+			iforest->updateSetting(false);
 			Models_.push_back(iforest);
 		}
 	}

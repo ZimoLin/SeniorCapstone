@@ -30,7 +30,7 @@ private:
 	int dSize = 0, dNum = 0, maxSize;
 	const double anomaly_level = .1;
 	bool normalized_kept_points;
-	int points_to_reconstruct_;
+	int points_to_reconstruct_; // new feature, need to be added to setting helper
 	int point_count_ = 0;
 	MatrixXd qZ_;
     Dirichlet weights_;

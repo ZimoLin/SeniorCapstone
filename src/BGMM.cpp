@@ -30,7 +30,11 @@ BGMM::BGMM(vector<vector<double>> initial_data, int max_stored_data_points, int 
 
 // BGMM::BGMM(string saved_state) : model(saved_state)
 // {
-//     //TODO
+//     // call decoder for saved_state string, should return a 
+//     // struct similar to the setting's file
+//     // 
+//     maxSize = 
+
 // }
 
 BGMM::~BGMM(){
