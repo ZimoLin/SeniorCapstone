@@ -239,10 +239,23 @@ void setting_helper::create_setting()
     int looper = 1;
     string temp_bar;
     string final_bar;
+    
+    ///
+    string temp_name;
+    string final_name;
+    ///
 
     cout << "" << endl;
 
     while(true) {
+        /////
+        cout << "Please enter the name for dimension " << looper << "." << endl;
+        cout << "If no more dimension, enter n." << endl;
+        std::getline(std::cin, temp_name);
+        if (temp_name.compare("n") == 0) break;
+        final_name = final_name + "," + temp_name;
+        ////
+
         cout << "Please enter barriers for dimension " << looper << "." << endl;
         cout << "Leave blank if this dimension has no barriers, but future dimensions do." << endl;
         cout << "If no more barriers are desired in further dimensions or no more dimensions exist, type \"n\"." << endl;
@@ -297,6 +310,11 @@ void setting_helper::create_setting()
         final_bar = final_bar + "," + temp_bar;
         looper ++;
     }
+
+    ////
+        final_name = final_name.substr(1, final_name.length() - 1);
+        outfile << "dimension_name = " << final_name << endl;
+    ////
     
     if (!final_bar.empty()){
         final_bar = final_bar.substr(1, final_bar.length() - 1);
