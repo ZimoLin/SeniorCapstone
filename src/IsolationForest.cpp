@@ -117,9 +117,10 @@ namespace IsolationForest
         {
                 this->m_randomizer = new Randomizer();
                 this->m_numTreesToCreate = 10;
-                this->m_subSamplingSize = 5;
-                this->max_stored_data_points = max_stored_data_points;
+                this->m_subSamplingSize = 10;
+                this->max_stored_data_points_ = max_stored_data_points;
                 this->points_to_reconstruct_ = points_to_reconstruct;
+                this->normalized_kept_points = false;
             for (auto data : initial_input)
                 push_data(data);
         }
@@ -287,6 +288,8 @@ namespace IsolationForest
             double worse_values = 0;
             for (size_t j = 0; j < m_trainData.size(); ++j) {
                     double comparison_score = NormalizedScore(m_trainData[j]);
+                    // cout << " c_s: " << comparison_score << endl;
+                    // cout << score << endl;
                     if (comparison_score <= score) {
                         worse_values++;
                     }
@@ -314,7 +317,7 @@ namespace IsolationForest
 
 
     /// Scores the sample against the specified tree.
-        double Forest::Score(vector<double> data, const NodePtr tree)
+        double Forest::Score(vector<double>& data, const NodePtr tree)
         {
                 double depth = (double)0.0;
 
@@ -332,8 +335,10 @@ namespace IsolationForest
                     ++depth;
                 }
                 if (lastNode != NULL) {
-                    depth += log2(lastNode->getCount());
+                    int curCount = lastNode->getCount();
+                    depth += curCount == 0 ? 0 : log2(curCount) * (m_featureValues.size());
                 }
+                // cout << depth << endl;
                 return depth;
         }
 
@@ -388,72 +393,109 @@ namespace IsolationForest
     }
 
     // push a new data point into feature value list.
-    void Forest::push_data(vector<double> data)
+    void Forest::push_data(vector<double>& data)
     {
-        m_trainData.push_back(data);
-        if (m_featureValues.size() == 0) {
-            for (size_t i = 0; i < data.size(); ++i) {
+        if (dSize == 0)
+            dSize = (int)data.size();
+        else if ((int)data.size() != dSize)
+            throw "Input data has wrong dimensionality";
+
+        ++dNum;
+
+        if ((int)m_trainData.size() == max_stored_data_points_){
+            if (normalized_kept_points){
+                double add_odds = ((double) max_stored_data_points_) / dNum;
+                double temp = ((double)rand() / (RAND_MAX));
+                if (temp < add_odds) {
+                    int index_to_drop = rand() % max_stored_data_points_;
+                    m_trainData[index_to_drop] = data;
+                    for (int i = 0; i < dSize; ++i)
+                        m_featureValues[i][index_to_drop] = data[i];
+                } else {
+                    m_trainData.erase(m_trainData.begin());
+                    m_trainData.push_back(data);
+                    for (int i = 0; i < dSize; ++i)
+                        m_featureValues[i].erase(m_featureValues[i].begin());
+                    push_transpose_data(data);
+                }
+            }
+        } else {
+            m_trainData.push_back(data);    
+            push_transpose_data(data);
+        }
+    }
+
+    // push data into the transpose matrix
+    void Forest::push_transpose_data(vector<double>& data)
+    {
+        if (m_featureValues.size() == 0){
+            for (size_t i = 0; i < data.size(); ++i){
                 vector<double> featureValueList;
                 featureValueList.push_back(data[i]);
                 m_featureValues.push_back(featureValueList);
             }
-        } else{
-            for (size_t i = 0; i < data.size(); ++i) {
+        } else {
+            for (size_t i = 0; i < data.size(); ++i){
                 vector<double>& featureValueList = m_featureValues[i];
                 featureValueList.push_back(data[i]);
             }
         }
     }
 
-        /// Destroys the entire forest of trees.
-        void Forest::Destroy()
+    // Destroys the entire forest of trees.
+    void Forest::Destroy()
+    {
+        vector<NodePtr>::iterator iter = m_trees.begin();
+        while (iter != m_trees.end())
         {
-                vector<NodePtr>::iterator iter = m_trees.begin();
-                while (iter != m_trees.end())
-                {
-                        NodePtr tree = (*iter);
-                        if (tree)
-                        {
-                                delete tree;
-                        }
-                        ++iter;
-                }
-                m_trees.clear();
+            NodePtr tree = (*iter);
+            if (tree)
+            {
+                delete tree;
+            }
+            ++iter;
         }
+        m_trees.clear();
+    }
 
         /// Frees the custom randomizer object (if any).
-        void Forest::DestroyRandomizer()
+    void Forest::DestroyRandomizer()
+    {
+        if (m_randomizer)
         {
-                if (m_randomizer)
-                {
-                        delete m_randomizer;
-                        m_randomizer = NULL;
-                }
+            delete m_randomizer;
+            m_randomizer = NULL;
         }
+    }
 
         /// Returns the forest as a JSON object.
-        string Forest::Dump() const
+    string Forest::Dump() const
+    {
+        string data = "{";
+        size_t treeIndex = 0;
+
+        vector<NodePtr>::const_iterator iter = m_trees.begin();
+        while (iter != m_trees.end())
         {
-                string data = "{";
-                size_t treeIndex = 0;
+            NodePtr tree = (*iter);
+            string treeData = "'Tree ";
 
-                vector<NodePtr>::const_iterator iter = m_trees.begin();
-                while (iter != m_trees.end())
-                {
-                        NodePtr tree = (*iter);
-                        string treeData = "'Tree ";
-
-                        treeData.append(to_string(treeIndex));
-                        treeData.append("': ");
-                        treeData.append(tree->Dump());
-                        ++iter;
-                        if (iter != m_trees.end())
-                                treeData.append(", ");
-                        ++treeIndex;
-                        data.append(treeData);
-                }
-                data.append("}");
-                return data;
+            treeData.append(to_string(treeIndex));
+            treeData.append("': ");
+            treeData.append(tree->Dump());
+            ++iter;
+            if (iter != m_trees.end())
+                treeData.append(", ");
+            ++treeIndex;
+            data.append(treeData);
         }
+        data.append("}");
+        return data;
+    }
+
+    void Forest::updateSetting(bool new_normalized_kept_points)
+    {
+        normalized_kept_points = new_normalized_kept_points;
+    }
 
 }
