@@ -25,7 +25,7 @@ Setting setting_helper::parse_setting(string fname) {
     vector<string> features_use = features;
     int prediction_delay = 1000;
     int maxSize = 1000;
-
+    int points_to_reconstruct = 1200;
 
     if (myfile.is_open()) {
 
@@ -128,11 +128,16 @@ Setting setting_helper::parse_setting(string fname) {
                         features_use.push_back(features[i]);
                     }
                 }
-            } else if ((line.substr(0, 10).compare("predicion")) == 0) {
+            } else if ((line.substr(0, 10).compare("prediction")) == 0) {
                 size_t found = line.find("=");
                 // cout << line.substr(found+2, line.length()-1) << endl;
-                prediction_delay = stod(line.substr(found+2, line.length()-1));
+                prediction_delay = stoi(line.substr(found+2, line.length()-1));
+            } else if ((line.substr(0,6).compare("points")) == 0){
+                size_t found = line.find("=");
+                points_to_reconstruct = stoi(line.substr(found+2, line.length()-1));
+                //cout << "PR " << points_to_reconstruct << endl;
             }
+                    
         }
 
 
@@ -165,7 +170,7 @@ Setting setting_helper::parse_setting(string fname) {
     res.s_models = models_use;
     res.s_features = features_use;
     res.s_barriers = barriers;
-
+    res.s_points_to_reconstruct = points_to_reconstruct;
     return res;
 }
 
@@ -330,6 +335,12 @@ void setting_helper::create_setting()
     cout << "Please enter how many samples you will allow the models to acclimate on? We suggest around 500 points." << endl;
     cin >> pd;
     outfile << "prediction_delay = " << pd << endl;
+
+    //Points to Reconstruct
+    int pr = 0;
+    cout << "How many points do you want to Reconstruct" << endl;
+    cin  >> pr;
+    outfile << "points_to_reconstruct = " << pr << endl;
 
 
     cout << "\nThank you. Your settings file can be found at " << fname << endl;
