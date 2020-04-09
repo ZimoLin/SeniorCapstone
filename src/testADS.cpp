@@ -47,7 +47,7 @@ int main(int argc, char const *argv[])
 	if (dim <= 0 || maxSize <= 0)
 		throw("Enter a number larger than 0 for the arguments.");
 	
-	AnomalyDetectionSystem ads;
+	AnomalyDetectionSystem ads("J1.txt");
 
 	unsigned seed = system_clock::now().time_since_epoch().count();
   	default_random_engine generator (seed);
