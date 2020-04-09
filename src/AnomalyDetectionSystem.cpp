@@ -28,9 +28,10 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 		prediction_delay_ = user_setting.s_prediction_delay;
 		barriers_ = user_setting.s_barriers;
 		max_stored_data_points_ = user_setting.s_max_store;
-		// Add points_to_reconstruct to settingHelper
+		points_to_reconstruct_ = user_setting.s_points_to_reconstruct;
 
 		cout << prediction_delay_ << endl;
+		cout << points_to_reconstruct_ << endl;
 	}	
 }
 
