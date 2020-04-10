@@ -21,6 +21,9 @@ struct normal_random_variable
         transform = eigenSolver.eigenvectors() * eigenSolver.eigenvalues().cwiseSqrt().asDiagonal();
     }
 
+    normal_random_variable()
+    {}
+
     Eigen::VectorXd mean;
     Eigen::MatrixXd transform;
 
@@ -38,13 +41,13 @@ class BayesianLinearReg
 {
 public:
 	BayesianLinearReg(VectorXd a_m0, MatrixXd m_S0, double beta);
-    // BayesianLinearReg(string saved_state);
+    BayesianLinearReg(string saved_state);
 	~BayesianLinearReg();
 
 	
 	VectorXd prediction_limit(MatrixXd& a_x, double stdevs);
     void set_posterior(MatrixXd& a_x, VectorXd& a_t);
-    // string save_state();
+    string save_state();
 
 
 private:

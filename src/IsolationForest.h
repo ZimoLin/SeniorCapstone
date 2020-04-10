@@ -95,6 +95,7 @@ namespace IsolationForest
     public:
         Forest(vector<vector<double>> initial_input, int max_stored_data_points, int points_to_reconstruct);
         Forest(uint32_t numTrees, uint32_t subSamplingSize);
+        Forest(string saved_state);
 
         virtual ~Forest();
 
@@ -110,6 +111,7 @@ namespace IsolationForest
         double process_input(vector<double> input_data);
         void process_feedback(vector<double> input_data, bool isAnomaly);
         void updateSetting(bool new_normalized_kept_points);
+        string save_state();
 
     private:
         Randomizer* m_randomizer; // Performs random number generation
@@ -125,7 +127,7 @@ namespace IsolationForest
         int point_count_ = 0;
         int dSize = 0, dNum = 0;
 
-        bool normalized_kept_points;
+        bool normalized_kept_points_;
 
 
         NodePtr CreateTree(const vector<vector<double>>& featureValues, size_t depth);

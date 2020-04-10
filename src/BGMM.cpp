@@ -1,12 +1,14 @@
 #include "BGMM.h"
 #include "libcluster.h"
 #include "distributions.h"
+#include "stateHelper.h"
 #include <iostream>
 #include "float.h"
 #include <cstdlib>
 #include <ctime>
 #include <random>
 #include <chrono>
+#include <fstream>
 
 using namespace std;
 using namespace Eigen;
@@ -18,7 +20,7 @@ using namespace distributions;
 BGMM::BGMM(vector<vector<double>> initial_data, int max_stored_data_points, int points_to_reconstruct) : model(initial_data, max_stored_data_points, points_to_reconstruct)
 {
         maxSize = max_stored_data_points;
-        normalized_kept_points = true;
+        normalized_kept_points_ = true;
         points_to_reconstruct_ = points_to_reconstruct;
 
         for (vector<double> data : initial_data)
@@ -28,14 +30,26 @@ BGMM::BGMM(vector<vector<double>> initial_data, int max_stored_data_points, int 
         srand(seed);
 }
 
-// BGMM::BGMM(string saved_state) : model(saved_state)
-// {
-//     // call decoder for saved_state string, should return a 
-//     // struct similar to the setting's file
-//     // 
-//     maxSize = 
-
-// }
+BGMM::BGMM(string saved_state) : model(saved_state)
+{
+    vData.clear();
+    stateHelper helper;
+    vector<vector<vector<double>>> data = helper.string_to_matrices(saved_state);
+    // data[0][0] stores the vector<double> that holds the settings
+    dSize = (int)data[0][0][0], dNum = (int)data[0][0][1], maxSize = (int)data[0][0][2];
+    normalized_kept_points_ = data[0][0][3] == 1.0 ? true : false;
+    points_to_reconstruct_ = (int)data[0][0][4], point_count_ = (int)data[0][0][5];
+    for (size_t i = 1; i < data.size(); ++i){
+        for (size_t j = 0; j < data[i].size(); ++j)
+            pushData(data[i][j]);
+    }
+    // to reset qZ, weights, and clusters
+     MatrixXd curData;
+     curData.setZero(vData.size(), dSize);
+     for (size_t i = 0; i < vData.size(); ++i)
+        curData.block(i, 0, 1, dSize) = vData[i];
+    learnBGMM(curData, qZ_, weights_, clusters_, PRIORVAL, -1, false, omp_get_max_threads());
+}
 
 BGMM::~BGMM(){
 
@@ -119,7 +133,7 @@ void BGMM::pushData(vector<double> input_data){
     ++dNum;
 
     if ((int)vData.size() == maxSize) {
-        if (normalized_kept_points) {
+        if (normalized_kept_points_) {
             double add_odds = ((double) maxSize) / dNum;
             double temp = ((double)rand() / (RAND_MAX));
             if (temp < add_odds) {
@@ -151,10 +165,33 @@ MatrixXd BGMM::transformData(vector<double> input_data){
 
 void BGMM::updateSetting(bool new_normalized_kept_points)
 {
-    normalized_kept_points = new_normalized_kept_points;
+    normalized_kept_points_ = new_normalized_kept_points;
 }
 
-// string BGMM::save_state()
-// {
-//     //TODO
-// }
+vector<vector<vector<double>>> BGMM::matrix_to_vector()
+{
+    vector<vector<vector<double>>> res;
+    // push settings into the first vector<vector<double>>, then push into res
+    vector<double> settingVec({(double)dSize, (double)dNum, (double)maxSize});
+    settingVec.push_back(normalized_kept_points_? 1.0 : 0.0);
+    settingVec.push_back((double)points_to_reconstruct_);
+    settingVec.push_back((double)point_count_);
+    vector<vector<double>> temp(1, settingVec);
+    res.push_back(temp);
+
+    for (size_t i = 0; i < vData.size(); ++i){
+        MatrixXd cur = vData[i];
+        vector<double> temp;
+        for (int j = 0; j < dSize; ++j)
+            temp.push_back(cur.row(0)(j));
+        vector<vector<double>> temp1(1, temp);
+        res.push_back(temp1);
+    }
+    return res;
+}
+
+string BGMM::save_state()
+{
+    stateHelper helper;
+    return helper.matrices_to_string(matrix_to_vector());
+}

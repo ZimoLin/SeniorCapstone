@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 using namespace std::chrono;
@@ -10,16 +11,18 @@ using namespace std::chrono;
 int anomalyCount = 0;
 
 void myFunc(vector<double> model_results, vector<double> data){
+	(void)data;
     cout << "\n Anomaly Detected\n" << endl;
 	cout << "\n Model results:\n" << endl;
 	for (double d : model_results)
 		cout << d << endl;
-
-	cout << "\n Data:\n" << endl;
-	for (double d : data)
-		cout << d << endl;
-	cout << "This is the " << ++anomalyCount << " anomaly detected" << endl;
 }
+
+// 	cout << "\n Data:\n" << endl;
+// 	for (double d : data)
+// 		cout << d << endl;
+// 	cout << "This is the " << ++anomalyCount << " anomaly detected" << endl;
+// }
 
 time_point<high_resolution_clock> start_time () {
     return (high_resolution_clock::now());
@@ -95,3 +98,46 @@ int main(int argc, char const *argv[])
 	return 0;
 }
 
+
+
+/* tests for saved state*/
+
+// int main()
+// {
+// 	vector<vector<double>> testdata;
+// 	for (int i = 0; i < 10; ++i){
+// 		testdata.push_back(vector<double>({(double)i, (double)i}));
+// 	}
+
+// 	AnomalyDetectionSystem ads;
+// 	AnomalyDetectionSystem::anomaly_detected_call_func func = myFunc;
+
+// 	// process 5 data points, then stop
+// 	for (int i = 0; i < 5; ++i){
+// 		ads.process_input(testdata[i], func);
+// 	}
+	
+// 	// store the 5 points state to result.txt
+// 	ofstream myfile("result.txt");
+// 	myfile << ads.save_state();
+// 	myfile.close();
+
+// 	// read the 5 points state from result.txt
+// 	ifstream myfile1("result.txt");
+// 	string saved_state;
+// 	getline(myfile1, saved_state);
+// 	myfile1.close();
+
+// 	// proceed to process the rest of the 5 points, the model
+// 	// has now processed 10 points
+// 	for (int i = 5; i < 10; ++i)
+// 		ads.process_input(testdata[i], func);
+
+// 	// initialize from the 5 points state, and save to compare.txt
+// 	ads.initalize_from_saved_state(saved_state);
+// 	ofstream myfile2("compare.txt");
+// 	myfile2 << ads.save_state();
+// 	myfile2.close();
+
+// 	// diff result.txt and compare.txt
+// }
