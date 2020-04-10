@@ -1,7 +1,0 @@
-anomaly_level = 0.05
-maximum_stored_points = 1000
-feature_exclude = 
-models_exclude = 
-dimension_name = apple,orange,grape,melon,n
-barriers = {[10,20]},{[20,30]},{},{[-inf,-10], [20,inf]}
-prediction_delay = 500
