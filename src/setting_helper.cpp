@@ -128,7 +128,7 @@ Setting setting_helper::parse_setting(string fname) {
                         features_use.push_back(features[i]);
                     }
                 }
-            } else if ((line.substr(0, 10).compare("predicion")) == 0) {
+            } else if ((line.substr(0, 10).compare("prediction")) == 0) {
                 size_t found = line.find("=");
                 // cout << line.substr(found+2, line.length()-1) << endl;
                 prediction_delay = stod(line.substr(found+2, line.length()-1));
