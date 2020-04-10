@@ -1,6 +1,0 @@
-anomaly_level = 0.05
-maximum_stored_points = 100
-feature_exclude = 
-models_exclude = 
-barriers = {},{[-10,10], [10,20]},{[0,6]}
-prediction_delay = 500

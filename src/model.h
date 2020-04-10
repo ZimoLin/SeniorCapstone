@@ -13,8 +13,8 @@ public:
 	model(string saved_state){(void)saved_state;};
 	virtual ~model(){};
 	virtual double process_input(vector<double> input_data) = 0;
-	virtual void process_feedback(vector<double> input_data, bool isAnomaly) = 0;	
-	// virtual string save_state() = 0;
+	virtual void process_feedback(vector<double> input_data, bool isAnomaly) = 0;
+	virtual string save_state() = 0;	
 };
 
 #endif

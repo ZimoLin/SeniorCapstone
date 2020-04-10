@@ -1,4 +1,5 @@
 #include "stacker.h"
+#include "stateHelper.h"
 #include <cmath>
 #include <Eigen/Dense>
 #include "BGMM.h"
@@ -43,10 +44,29 @@ stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data,
 	stacking_model_ = new BayesianLinearReg(a_m0, m_S0, beta);
 }
 
-// stacker::stacker(string saved_state)
-// {
-// 	//TODO
-// }
+stacker::stacker(string saved_state)
+{
+	vector<string> all_saved_states;
+	size_t curPos = saved_state.find('\n'), prevPos = 0;
+	while (curPos != string::npos){
+		all_saved_states.push_back(saved_state.substr(prevPos, curPos - prevPos));
+		if (curPos == saved_state.size() - 1) break;
+		prevPos = curPos + 1, curPos = saved_state.find('\n', curPos + 1);
+	}
+
+	stateHelper helper;
+	vector<vector<vector<double>>> model_state = helper.string_to_matrices(all_saved_states[0]);
+	for (size_t i = 0; i < model_state[0][0].size(); ++i){
+		if (model_state[0][0][i] == 0.0 || model_state[0][0][i] == 1.0){
+			BGMM *bgmm = new BGMM(all_saved_states[1 + i]);
+			Models_.push_back(bgmm);
+		} else {
+			Forest *iforest = new Forest(all_saved_states[1 + i]);
+			Models_.push_back(iforest);
+		}
+	}
+	stacking_model_ = new BayesianLinearReg(all_saved_states[all_saved_states.size() - 1]);
+}
 
 stacker::~stacker()
 {
@@ -102,10 +122,14 @@ double stacker::inverse_logit(double p)
 	return exp(p) / (1 + exp(p));
 }
 
-// string stacker::save_state()
-// {
-// 	//TODO
-// }
+string stacker::save_state()
+{
+	string res = "";
+	for (auto model : Models_)
+		res += model->save_state() + "\n";
+	res += stacking_model_->save_state() + '\n';
+	return res;
+}
 
 
 

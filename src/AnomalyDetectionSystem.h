@@ -30,7 +30,9 @@ public:
      * Note that AnomalyDetectionSystem does allocate memory, so the destructor is non-empty.
      */
 	~AnomalyDetectionSystem();
-	
+
+    // recover the Anomaly Detection System from a prviously saved state
+	void initalize_from_saved_state(string saved_state);
 
     /*
      * The anomaly detection system processes the next provided data vector. Note that per temporal
@@ -49,7 +51,7 @@ public:
      */
 	void process_feedback(vector<double> model_results, vector<double> data, bool isAnomaly);
 
-    void initalize_from_saved_state(string saved_state);
+    
     
     string save_state();
 
