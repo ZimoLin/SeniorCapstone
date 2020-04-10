@@ -14,6 +14,7 @@ typedef struct setting
 {
     int s_max_store;
     int s_prediction_delay;
+    int s_points_to_reconstruct;
     double s_anomaly_level;
     vector<string> s_models;
     vector<string> s_features;
