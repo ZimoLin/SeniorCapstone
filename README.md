@@ -7,3 +7,6 @@ This project is designed to work as a library where the SysAdmin's code interfac
 
 ## Further information
 More in-depth discussion on the different options can be found at Options Guide.pdf on the root. Benchmarks are located within Benchmarking.pdf.
+
+## Future Progress
+Unfortunately, due to Coronavirus certain aspects of the project needed to be rescoped. Future development could integrate more unsupervised models (ARIMA, SVM, HMM, etc), clean up the installation process, optimize some shared calculations, improve some approximated values, or document the non-UI files.
