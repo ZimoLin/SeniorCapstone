@@ -10,19 +10,20 @@ using namespace std::chrono;
 
 int anomalyCount = 0;
 
-void myFunc(vector<double> model_results, vector<double> data){
+void myFunc(vector<double>& model_results, vector<double>& data){
 	(void)data;
-    cout << "\n Anomaly Detected\n" << endl;
-	cout << "\n Model results:\n" << endl;
-	for (double d : model_results)
-		cout << d << endl;
-}
+	(void) model_results;
+ 	// cout << "\n Anomaly Detected\n" << endl;
+	// cout << "\n Model results:\n" << endl;
+	// // for (double d : model_results)
+	// // 	cout << d << endl;
 
-// 	cout << "\n Data:\n" << endl;
-// 	for (double d : data)
-// 		cout << d << endl;
-// 	cout << "This is the " << ++anomalyCount << " anomaly detected" << endl;
-// }
+
+	// cout << "\n Data:\n" << endl;
+	// for (double d : data)
+	// 	cout << d << endl;
+	// cout << "This is the " << ++anomalyCount << " anomaly detected" << endl;
+}
 
 time_point<high_resolution_clock> start_time () {
     return (high_resolution_clock::now());
@@ -50,7 +51,7 @@ int main(int argc, char const *argv[])
 	if (dim <= 0 || maxSize <= 0)
 		throw("Enter a number larger than 0 for the arguments.");
 	
-	AnomalyDetectionSystem ads("J1.txt");
+	AnomalyDetectionSystem ads;
 
 	unsigned seed = system_clock::now().time_since_epoch().count();
   	default_random_engine generator (seed);
@@ -58,8 +59,8 @@ int main(int argc, char const *argv[])
 
   	AnomalyDetectionSystem::anomaly_detected_call_func func = myFunc;
 
-  	cout << "Prime the ADS with 1000 samples from a standard normal distribution" << endl;
-	for (int i = 0; i < maxSize + 1; ++i){
+  	cout << "Prime the ADS with " << maxSize << " samples from a standard normal distribution" << endl;
+	for (int i = 0; i < maxSize; ++i){
 		vector<double> cur;
 		for (int i = 0; i < dim; ++i)
 			cur.push_back(distribution1(generator));
@@ -80,7 +81,7 @@ int main(int argc, char const *argv[])
 
     vector<vector<double>> data;
 
-    for (int i = 0; i < 1000; ++i){
+    for (int i = 0; i < 10000; ++i){
     	vector<double> cur;
     	for (int j = 0; j < dim; ++j)
     		cur.push_back(distribution3(generator));
@@ -90,11 +91,11 @@ int main(int argc, char const *argv[])
     cout << "On the other hand, now that the variance has contracted, we will stop seeing anomalous samples." << endl;
 
     auto start = start_time();
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 10000; ++i)
         ads.process_input(data[i], func);
     
     double time = delta_usec(start)/1000.0;
-    cout << "1000 data points took " << time << " ms." << endl;
+    cout << "10000 data points took " << time << " ms." << endl;
 	return 0;
 }
 

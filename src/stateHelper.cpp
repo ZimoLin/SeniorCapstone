@@ -47,27 +47,22 @@ vector<vector<vector<double>>> stateHelper::string_to_matrices(string line)
         size_t left_cb  = -1;
         size_t right_cb = -1;
 
-        do { //get each matrix
-
+        do {
+             //get each matrix
             left_cb  = line.find("{", right_cb+1);
             right_cb = line.find("}", right_cb+1);
-            //cout << "{"<< left_cb << endl;
-            //cout << "}"<< right_cb << endl;
 
             if ((int)left_cb == -1 && (int)right_cb == -1) break;
-                //cout << "r-l " << right_cb-left_cb + 1; 
             string s_matrix=line.substr(left_cb, right_cb - left_cb+1);
-                //cout << "Matrix: " << s_matrix << endl;
             vector <vector<double>> matrix;
             size_t left_bk  = 0;
-                //size_t comma    = 0;
             size_t right_bk = 0;
             if (right_cb-left_cb != 1){
-                do { //get each row
+                do { 
+                    //get each row
                     left_bk  = s_matrix.find("[", right_bk+1);                       
                     right_bk = s_matrix.find("]", right_bk+1);
                     string s_row = s_matrix.substr(left_bk,right_bk - left_bk+1);
-                    //cout << "Row: " << s_row << endl;
                     vector <double> row;
                     size_t lp = 0;
                     size_t rp = s_row.find(",",0);
@@ -77,13 +72,10 @@ vector<vector<vector<double>>> stateHelper::string_to_matrices(string line)
                         double entry = stod(s_element);
                         row.push_back(entry);
                     } else{
-                        do{//get each element
-                            //cout << "lp " << lp << ", rp " << rp << endl;
+                        do{
+                            //get each element
                             string s_element = s_row.substr(lp+1,rp-lp-1);
-                            //cout << "element " << s_element << endl;
                             double entry = stod(s_element);
-
-                            //cout << "double " << entry << endl;
                             lp = rp;
                             rp = s_row.find(",",rp+1);
                             row.push_back(entry);

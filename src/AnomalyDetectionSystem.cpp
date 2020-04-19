@@ -4,7 +4,7 @@
 #include "stateHelper.h"
 #include <sys/time.h>
 #include<limits>
-#include "setting_helper.h"
+#include "settingHelper.h"
 
 using namespace std::chrono;
 using namespace std;
@@ -14,13 +14,13 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 	if (file_name.empty()){
 		anomaly_level_ = 0.05;
 		derived_features_ = {"delta", "weekday", "time", "date", "month"};
-		models_ = {"IFORESTS_RECENT"};
-		prediction_delay_ = 1000;
+		models_ = {"BGMM_RECENT", "BGMM_REPRESENTATIVE", "IFORESTS_RECENT", "IFORESTS_REPRESENTATIVE"};
+		prediction_delay_ = 100;
 		barriers_ = vector<vector<double>>();		
-		max_stored_data_points_ = 1000;
-		points_to_reconstruct_ = 100;
+		max_stored_data_points_ = 100;
+		points_to_reconstruct_ = 200;
 	} else {
-		setting_helper helper;
+		settingHelper helper;
 		Setting user_setting = helper.parse_setting(file_name); 
 
 		anomaly_level_ = user_setting.s_anomaly_level;
@@ -30,9 +30,6 @@ AnomalyDetectionSystem::AnomalyDetectionSystem(string file_name)
 		barriers_ = user_setting.s_barriers;
 		max_stored_data_points_ = user_setting.s_max_store;
 		points_to_reconstruct_ = user_setting.s_points_to_reconstruct;
-
-		cout << prediction_delay_ << endl;
-		cout << points_to_reconstruct_ << endl;
 	}	
 }
 
@@ -104,20 +101,18 @@ void AnomalyDetectionSystem::initalize_from_saved_state(string saved_state)
 	gettimeofday(&last_tp_, 0);
 }
 
-void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected_call_func func)
+void AnomalyDetectionSystem::process_input(vector<double>& data, anomaly_detected_call_func func)
 {
 	bool calledFunc = false;
-	// cout << "before implied feat: " << data.size() << endl;
+	
 	add_implied_features(data);
-	// cout << "after implied feat: " << data.size() << endl;
+	
 	vector<double> next_data = data;
 	vector<double> model_results(models_.size(), numeric_limits<double>::quiet_NaN());
 
 	if (ready_for_processing()){
-
-		// cout << "before derived feat: " << data.size() << endl;
+		
 		add_derived_features(data);
-		// cout << "after derived feat: " << data.size() << endl;
 
 		if (stacker_){
 			model_results = stacker_->process_input(data);
@@ -145,10 +140,10 @@ void AnomalyDetectionSystem::process_input(vector<double> data, anomaly_detected
 	}
 }
 
-void AnomalyDetectionSystem::process_feedback(vector<double> model_results, vector<double> data, bool isAnomaly)
+void AnomalyDetectionSystem::process_feedback(vector<double>& model_results, vector<double>& data, bool isAnomaly)
 {
 	if (!stacker_) 
-		return; // error maybe
+		return; 
 	stacker_->process_feedback(model_results, data, isAnomaly);
 }
 

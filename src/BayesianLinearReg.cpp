@@ -4,17 +4,15 @@
 #include <iostream>
 #include <algorithm> 
 
-BayesianLinearReg::BayesianLinearReg(VectorXd a_m0, MatrixXd m_S0, double beta) 
+BayesianLinearReg::BayesianLinearReg(VectorXd& a_m0, MatrixXd& m_S0, double beta) 
 : prior_(a_m0, m_S0), posterior_(a_m0, m_S0)
 {
-	// this->prior_(a_m0, m_S0);
 	this->v_m0_ = a_m0;
 	this->m_S0_ = m_S0;
 	this->beta_ = beta;
 
 	this->v_mN_ = this->v_m0_;
 	this->m_SN_ = this->m_S0_;
-	// this->posterior_ = this->prior_;
 }
 
 BayesianLinearReg::BayesianLinearReg(string saved_state)
@@ -63,7 +61,6 @@ void BayesianLinearReg::set_posterior(MatrixXd& a_x, VectorXd& a_t)
 	for (int i = 0; i < v_mN_.size() - 1; ++i)
 		v_mN_(i) = factor * v_mN_(i);
 
-	// cout <<v_mN_ << endl;
 	posterior_ = normal_random_variable(v_mN_, m_SN_);
 }
 

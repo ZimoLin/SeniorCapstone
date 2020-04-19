@@ -9,7 +9,7 @@ using namespace std;
 using namespace Eigen;
 using namespace IsolationForest;
 
-stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data, 
+stacker::stacker(vector<string>& model_list, vector<vector<double>>& initial_data, 
 				int max_stored_data_points, int points_to_reconstruct)
 {
 	for (string model_name : model_list){
@@ -18,14 +18,14 @@ stacker::stacker(vector<string> model_list, vector<vector<double>> initial_data,
 			Models_.push_back(bgmm);
 		} else if (model_name == "BGMM_RECENT"){
 			BGMM *bgmm = new BGMM(initial_data, max_stored_data_points, points_to_reconstruct);
-			bgmm->updateSetting(false);
+			bgmm->update_setting(false);
 			Models_.push_back(bgmm);
 		} else if (model_name == "IFORESTS_REPRESENTATIVE"){
 			Forest *iforest = new Forest(initial_data, max_stored_data_points, points_to_reconstruct);
 			Models_.push_back(iforest);
 		} else if (model_name == "IFORESTS_RECENT"){
 			Forest *iforest = new Forest(initial_data, max_stored_data_points, points_to_reconstruct);
-			iforest->updateSetting(false);
+			iforest->update_setting(false);
 			Models_.push_back(iforest);
 		}
 	}
@@ -73,7 +73,7 @@ stacker::~stacker()
 	delete stacking_model_;
 }
 
-vector<double> stacker::process_input(vector<double> input_data)
+vector<double> stacker::process_input(vector<double>& input_data)
 {
 	MatrixXd model_predictions(1, Models_.size() + 1);
 	vector<double> res;
@@ -90,7 +90,7 @@ vector<double> stacker::process_input(vector<double> input_data)
 	return res;
 }
 
-void stacker::process_feedback(vector<double> model_outputs, vector<double> input_data, bool is_anamoly)
+void stacker::process_feedback(vector<double>& model_outputs, vector<double>& input_data, bool is_anamoly)
 {
 	for (auto& m : Models_)
 		m->process_feedback(input_data, is_anamoly);

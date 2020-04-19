@@ -93,34 +93,34 @@ namespace IsolationForest
     class Forest : public model
     {
     public:
-        Forest(vector<vector<double>> initial_input, int max_stored_data_points, int points_to_reconstruct);
+        Forest(vector<vector<double>>& initial_input, int max_stored_data_points, int points_to_reconstruct);
         Forest(uint32_t numTrees, uint32_t subSamplingSize);
         Forest(string saved_state);
 
         virtual ~Forest();
 
-        void SetRandomizer(Randomizer* newRandomizer);
-        NodePtr CreateTree(const vector<vector<double>>& featureValues, const vector<vector<double>>& trainData, size_t depth);
-        void Create();
+        void set_randomizer(Randomizer* newRandomizer);
+        NodePtr create_tree(const vector<vector<double>>& featureValues, const vector<vector<double>>& trainData, size_t depth);
+        void create();
 
-        double Score(vector<double> data);
-        double NormalizedScore(vector<double> data);
+        double score(vector<double>& data);
+        double normalized_score(vector<double>& data);
 
         string Dump() const;
 
-        double process_input(vector<double> input_data);
-        void process_feedback(vector<double> input_data, bool isAnomaly);
-        void updateSetting(bool new_normalized_kept_points);
+        double process_input(vector<double>& input_data);
+        void process_feedback(vector<double>& input_data, bool isAnomaly);
+        void update_setting(bool new_normalized_kept_points);
         string save_state();
 
     private:
-        Randomizer* m_randomizer; // Performs random number generation
-        vector<vector<double>> m_featureValues; // Lists each feature and maps it to all unique values in the training set
+        Randomizer* m_randomizer_; // Performs random number generation
+        vector<vector<double>> m_featureValues_; // Lists each feature and maps it to all unique values in the training set
         // m_featureValues is the transpose of the original
-        vector<vector<double>> m_trainData;
-        NodePtrList m_trees; // The decision trees that comprise the forest
-        uint32_t m_numTreesToCreate; // The maximum number of trees to create
-        uint32_t m_subSamplingSize; // The maximum depth of a tree
+        vector<vector<double>> m_trainData_;
+        NodePtrList m_trees_; // The decision trees that comprise the forest
+        uint32_t m_numTreesToCreate_; // The maximum number of trees to create
+        uint32_t m_subSamplingSize_; // The maximum depth of a tree
 
         int max_stored_data_points_; // TODO comment
         int points_to_reconstruct_;
@@ -130,12 +130,12 @@ namespace IsolationForest
         bool normalized_kept_points_;
 
 
-        NodePtr CreateTree(const vector<vector<double>>& featureValues, size_t depth);
-        double Score(vector<double>& data, const NodePtr tree);
+        NodePtr create_tree(const vector<vector<double>>& featureValues, size_t depth);
+        double score(vector<double>& data, const NodePtr tree);
         void push_data(vector<double>& data);
         void push_transpose_data(vector<double>& data);
 
-        void Destroy();
-        void DestroyRandomizer();
+        void destroy();
+        void destroy_randomizer();
     };
 };

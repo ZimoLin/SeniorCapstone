@@ -1,7 +1,7 @@
-#include "setting_helper.h"
+#include "settingHelper.h"
 
 int main()
 {
-	setting_helper helper;
+	settingHelper helper;
 	helper.create_setting();
 }

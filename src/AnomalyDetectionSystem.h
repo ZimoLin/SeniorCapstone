@@ -16,7 +16,7 @@ public:
      * values (neeeded for process_feedback) and data is a feature-expanded representation of the
      * corresponding data.
      */
-	typedef void (*anomaly_detected_call_func)(vector<double> model_results, vector<double> data);
+	typedef void (*anomaly_detected_call_func)(vector<double>& model_results, vector<double>& data);
 
     /*!
      * \brief Constructs an anomaly detection system using the settings provided by the file named by
@@ -42,7 +42,7 @@ public:
      * \param data a vector of doubles, the input data
      * \param func the function called when anomaly detected
      */
-	void process_input(vector<double> data, anomaly_detected_call_func func);
+	void process_input(vector<double>& data, anomaly_detected_call_func func);
 
 
     /*!
@@ -54,7 +54,7 @@ public:
      * \param data, a vector of doubles, the input data
      * \param isAnomaly, true if it is anomaly
      */
-	void process_feedback(vector<double> model_results, vector<double> data, bool isAnomaly);
+	void process_feedback(vector<double>& model_results, vector<double>& data, bool isAnomaly);
 
     
     

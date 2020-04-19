@@ -40,7 +40,7 @@ struct normal_random_variable
 class BayesianLinearReg
 {
 public:
-	BayesianLinearReg(VectorXd a_m0, MatrixXd m_S0, double beta);
+	BayesianLinearReg(VectorXd& a_m0, MatrixXd& m_S0, double beta);
     BayesianLinearReg(string saved_state);
 	~BayesianLinearReg();
 
