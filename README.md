@@ -5,6 +5,9 @@ Enclosed with you can find Granny Smith Apple's 2019-2020 senior capstone projec
 ## Getting Started
 This project is designed to work as a library where the SysAdmin's code interfaces with the code developed by the team. To understand this ecosystem, one should view the Data Flow and Feedback Flow pdf files on the root. Then, within the src folder one can find the main interface in AnomalyDetectionSystem.h. This file is complete with Doxygen commentary to make the setup as easy as possible. An example for demonstration purposes can be found within testADS.cpp. To start your own project, first run ADSSettingHelper which is located on the root. This will prompt you through the creation of a settings file that you can use to construct an AnomalyDetectionSystem object.
 
+## Installation
+This porject requires libcluster to be installed in your device. The instruction to install libcluster can be found in the libcluster folder within the project's GitHub repository. Please install libcluster directly from the folder, rather than the original libcluster repo, since the code has been modified to work with this project. 
+
 ## Further information
 More in-depth discussion on the different options can be found at Options Guide.pdf on the root. Benchmarks are located within Benchmarking.pdf.
 
